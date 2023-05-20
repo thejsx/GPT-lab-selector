@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Input Form</title>
+    <link rel="stylesheet" type="text/css" href="/static/main.css">
+</head>
+
+<body>
+    <h1 id="API-title">Walk in Wellness Lab Test Selector</h1>
+
+    <div class="instructions-container">
+        <div id="Instructions">Please click on "Add health data" then fill out and submit the form to get assistance with lab test selection.</div>
+    </div>  
+
+    <div id="button-container">
+        <input type="button" class="myButton" id="refresh" value="Start Over">
+        <input type="button" class="myButton" id="addInfo" value="Add health data">
+    </div>
+
+    <div id="input-container">
+        <form id="form">
+            <div id="query" name="query" rows="2"></div>
+        </form>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div id="modal-content-id" class="modal-content">
+            <div class="modal-draggable">Click to Drag Checklist</div>
+        </div>
+    </div>
+
+    <div class="results-container">
+        <div>
+            <h2>Tests that may be helpful:</h2>
+            <div id="result1"></div>
+        </div>
+        <div>   
+            <h2>Panels that include these tests:</h2>
+            <div id="result2"></div>
+        </div>
+    </div>
+
+    <div class="message-container">
+        <h2>Lab Test Description: </h2>
+        <div id="messages"></div>
+    </div>
+
+    <div id="notes-container">
+        <div id="notes"></div>
+    </div>
+
+    <div id="validModal" class="validModal">
+        <p id="modal-valid-text"></p>
+    </div>
+
+    <script src="/static/main.js"></script>
+
+</body>
+</html>

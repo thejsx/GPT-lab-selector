@@ -1,0 +1,329 @@
+body {
+    background-color:white;
+    color:black;
+ }
+
+.instructions-container {
+    font-size: 18px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    display: flex;
+    padding:20px;
+}
+
+#API-title {
+    color:black;
+}
+
+#Instructions {
+    align-items: center;
+    justify-content: center;
+}
+
+#input-container {
+    display: none;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    padding: 10px;
+}
+
+
+#query {
+    border: 1px solid blue;
+    padding: 10px;
+    width: 80vw;
+    max-width: 800px;
+    font-size: 14px;
+}
+
+#API-title {
+    font-size: 24px;
+    font-weight: 800;
+    text-align: center; /* Center align the text in the label */
+    display: block;}
+
+.myButton {
+    width: 135px;  /* adjust as needed */
+    height: 25px;  /* adjust as needed */
+    font-size: 16px;  /* adjust as needed */
+    margin-top: 5px; 
+}
+
+#button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Add a gap between buttons */
+}
+
+#checklistContainer {
+    display: none;
+}
+
+.message-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 15px;
+    font-size: 14px;
+    gap: 20px;
+    
+}
+
+.message-container h2 {
+    font-family: Helvetica;
+    min-width: max-content;
+    margin: 0px;
+}
+
+.message-title {
+    margin-right: 50px; /* adjust as needed */
+}
+
+#messages {
+    font-size: 20px;
+    border: 1px solid green;
+    padding: 15px;
+    width: 80%
+}
+
+.results-container {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 0 10px;  /* adjust as needed */
+}
+
+
+#result1, #result2 {
+    border: 1px solid red;
+    padding: 20px;
+    flex-grow: 1; /* Grow equally, fill available space */
+    flex-shrink: 1; /* Shrink equally, prevent overflow */
+    flex-basis: 0; /* Don't consider width or content, just look at flex grow/shrink */
+    margin: 10px;
+}
+
+a:hover {
+    color: blue;
+}
+
+#notes-container {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+#notes {
+    border: 1px solid black;
+    font-size: 20px;   
+    padding: 20px;
+    font-weight: 800;
+    width: 80%;
+
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+
+.bold-key {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.indented-item {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    padding-left: 15px;
+    font-size: 14px;
+    font-weight: 100;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    overflow: auto;
+  }
+  
+  .modal-content {
+    display: flex;           /* Make this a flex container */
+    flex-direction: column;  /* Stack the children vertically */
+    flex-grow: 1;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0px;
+    border: 1px solid #888;
+    max-width: 90%; 
+    height: 85vh;
+    max-height: fit-content;
+    resize: both;
+    box-sizing: border-box;
+    min-height: 450px;
+    overflow: auto;
+  }
+
+.modal-draggable {
+    height: 20px;
+    font-size: 12px;
+    color: rgb(131, 123, 123);
+    background-color: #1b1919;
+    text-align: center;
+    cursor: pointer;
+}
+
+.modal-close {
+    color: red;
+    cursor: pointer;
+    font-size: 30px;
+}
+
+.header{
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#submitChecklist, #clearForm {
+    display: center;
+    width: max-content;
+    font-size: 14px;
+    margin: 1px;
+}
+
+.checklistbuttons {
+    text-align: center;
+    font-size: 14px;
+} 
+
+.box *, .query-box * {
+    font-size: 12px;
+    box-sizing: border-box;
+}
+
+.first-box{
+    padding: 0 0 5px 15px;
+    border: 1px solid #000;
+    box-sizing: border-box;
+    height: fit-content;
+}
+
+.first-box-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: auto;
+    flex: 1;
+    font-size: 14px;
+}
+
+.box{
+    border: 1px solid #000;
+    resize: vertical;
+    overflow: auto;
+    box-sizing: border-box;
+    display: flex;
+    padding: 1% 0 1% 1%;
+}
+
+.box h2, .first-box h2, .query-box h2 {
+    text-align: center;
+    font-size: 16px;
+}
+h1 {
+    text-align: center;
+    flex-grow: 1;
+    font-size: 20px;
+    margin: 0px;
+}
+
+.box-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: auto;
+    padding: auto;
+    flex: 1;
+}
+
+.box-content > div {
+    display: flex;
+    flex-direction: row;
+    align-items:flex-start;
+    gap: 10px;
+}
+
+
+.query-box{
+    padding-top: auto;
+    border: 1px solid #000;
+    gap: 10px;
+    min-height: 50px;
+    resize: vertical;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items:stretch;
+    overflow-y: auto;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1% 4% 1% 1%;
+    max-height: 80px;
+}
+
+
+#queryInput {
+    display: flex;
+    min-width: 50px;
+    overflow-y: auto;
+    word-break: break-all;
+    resize: none;
+    font-size: 14px;
+    flex-grow: 1;
+}
+
+.query-box > div {
+    display: flex;
+    flex-direction: column;
+    width:fit-content;
+}
+#validateQuery, #clearQuery {
+    width:fit-content;
+}
+
+.validModal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 50%;
+    top: 50%;
+    width: fit-content; /* Full width */
+    height: fit-content; /* Full height */
+    transform: translate(-50%, -50%);
+    background-color: rgb(0,0,0); /* Fallback color */
+    color: white;
+    text-align: center;
+    font-size: 24px;
+    border: 1px solid #888;
+}
+

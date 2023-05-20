@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/main.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Questionnaire</title>
+  </head>
+<body>  
+    <div class="modal-draggable" id="modal-draggable">Click to Drag Checklist</div> 
+
+    <div class="header">
+        <h1>Medical Questionnaire</h1>
+        <span class="modal-close" id="modal-close">&times;</span>
+    </div>
+
+    <div class="first-box">
+        <h2>Personal information:</h2>
+        <div class="first-box-content">
+            <div>
+                <label for="gender">Gender:</label>
+                <select id="gender" class="drop-down">
+                    <option value="" disabled selected>None</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div>
+                <label for="age">Age:</label>
+                <select id="age" class="drop-down">
+                    <option value="" disabled selected>None</option>
+                    <option value="0-20">0-20</option>
+                    <option value="20-30">20-30</option>
+                    <option value="30-40">30-40</option>
+                    <option value="40-50">40-50</option>
+                    <option value="50-60">50-60</option>
+                    <option value="60-70">60-70</option>
+                    <option value="70-80">70-80</option>
+                    <option value="80-90">80-90</option>
+                    <option value="90+">90+</option>
+                </select>
+            </div>
+            <div>
+                <label for="weight">Weight (lbs):</label>
+                <select id="weight" class="drop-down">
+                    <option value="" disabled selected>None</option>
+                    <option value="0-50">0-50</option>
+                    <option value="50-100">50-100</option>
+                    <option value="100-150">100-150</option>
+                    <option value="150-200">150-200</option>
+                    <option value="200-250">200-250</option>
+                    <option value="250-300">250-300</option>
+                    <option value="300-350">300-350</option>
+                    <option value="350+">350+</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="box">
+        <h2>Diagnoses:</h2>
+        <div class="box-content">
+            <div>
+                <input type="checkbox" id="diabetes" name="diagnoses" value="Diabetes">
+                <label for="diabetes">Diabetes</label>
+            </div>
+            <div>
+                <input type="checkbox" id="hypertension" name="diagnoses" value="Hypertension">
+                <label for="hypertension">Hypertension</label>
+            </div>
+            <div>
+                <input type="checkbox" id="hyperlipidemia">
+                <label for="hyperlipidemia">High Cholesterol</label>
+            </div>
+            <div>
+                <input type="checkbox" id="thyroid-disorder">
+                <label for="thyroid-disorder">Thyroid Disorder</label>
+            </div>
+            <div>
+                <input type="checkbox" id="heart-disease">
+                <label for="heart-disease">Heart Disease</label>
+            </div>
+            <div>
+                <input type="checkbox" id="kidney-disease">
+                <label for="kidney-disease">Kidney Disease</label>
+            </div>
+            <div>
+                <input type="checkbox" id="liver-disease">
+                <label for="liver-disease">Liver Disease</label>
+            </div>
+            <div>
+                <input type="checkbox" id="anemia">
+                <label for="anemia">Anemia (Low Iron)</label>
+            </div>
+            <div>
+                <input type="checkbox" id="allergies">
+                <label for="allergies">Allergies</label>
+            </div>
+            <div>
+                <input type="checkbox" id="arthritis">
+                <label for="arthritis">Arthritis</label>
+            </div>
+            <div>
+                <input type="checkbox" id="asthma">
+                <label for="asthma">Asthma</label>
+            </div>
+            <div>
+                <input type="checkbox" id="osteoporosis">
+                <label for="osteoporosis">Osteoporosis</label>
+            </div>
+            <div>
+                <input type="checkbox" id="GERD">
+                <label for="GERD">Acid Reflux / GERD</label>
+            </div>
+            <div>
+                <input type="checkbox" id="depression-anxiety">
+                <label for="depression-anxiety">Depression/Anxiety</label>
+            </div>
+            <div>
+                <input type="checkbox" id="ADHD">
+                <label for="ADHD">ADHD</label>
+            </div>
+            <div>
+                <input type="checkbox" id="Alzheimers">
+                <label for="Alzheimers">Alzheimer's Disease</label>
+            </div>
+            <div>
+                <input type="checkbox" id="autoimmune-disorder">
+                <label for="autoimmune-disorder">Autoimmune Diseases</label>
+            </div>
+            <div>
+                <input type="checkbox" id="fractures">
+                <label for="fractures">Bone Fractures</label>
+            </div>
+            <div>
+                <input type="checkbox" id="cancer">
+                <label for="cancer">Cancer</label>
+            </div>
+            <div>
+                <input type="checkbox" id="COPD">
+                <label for="COPD">COPD</label>
+            </div>
+            <div>
+                <input type="checkbox" id="cystic-fibrosis">
+                <label for="cystic-fibrosis">Cystic Fibrosis</label>
+            </div>
+            <div>
+                <input type="checkbox" id="dementia">
+                <label for="dementia">Dementia</label>
+            </div>
+            <div>
+                <input type="checkbox" id="eating-disorder">
+                <label for="eating-disorder">Eating Disorders (like Anorexia, Bulimia)</label>
+            </div>
+            <div>
+                <input type="checkbox" id="eczema">
+                <label for="eczema">Eczema</label>
+            </div>
+            <div>
+                <input type="checkbox" id="endometriosis">
+                <label for="endometriosis">Endometriosis</label>
+            </div>
+            <div>
+                <input type="checkbox" id="epilepsy">
+                <label for="epilepsy">Epilepsy</label>
+            </div>
+            <div>
+                <input type="checkbox" id="fibromyalgia">
+                <label for="fibromyalgia">Fibromyalgia</label>
+            </div>
+            <div>
+                <input type="checkbox" id="gastroenteritis">
+                <label for="gastroenteritis">Gastroenteritis</label>
+            </div>
+            <div>
+                <input type="checkbox" id="gout">
+                <label for="gout">Gout</label>
+            </div>
+            <div>
+                <input type="checkbox" id="HIV/AIDS">
+                <label for="HIV/AIDS">HIV/AIDS</label>
+            </div>
+            <div>
+                <input type="checkbox" id="influenza">
+                <label for="influenza">Flu</label>
+            </div>
+            <div>
+                <input type="checkbox" id="insomnia">
+                <label for="insomnia">Insomnia</label>
+            </div>
+            <div>
+                <input type="checkbox" id="IBS">
+                <label for="IBS">Irritable Bowel Syndrome</label>
+            </div>
+            <div>
+                <input type="checkbox" id="menopause">
+                <label for="menopause">Menopause</label>
+            </div>
+            <div>
+                <input type="checkbox" id="migraine">
+                <label for="migraine">Migraine</label>
+            </div>
+            <div>
+                <input type="checkbox" id="movement-disorder">
+                <label for="movement-disorder">Movement Disoder</label>
+            </div>
+            <div>
+                <input type="checkbox" id="psoriasis">
+                <label for="psoriasis">Psoriasis</label>
+            </div>
+            <div>
+                <input type="checkbox" id="PTSD">
+                <label for="PTSD">PTSD</label>
+            </div>
+            <div>
+                <input type="checkbox" id="schizophrenia">
+                <label for="schizophrenia">Schizophrenia</label>
+            </div>
+            <div>
+                <input type="checkbox" id="sinusitis">
+                <label for="sinusitis">Sinusitis</label>
+            </div>
+            <div>
+                <input type="checkbox" id="sleep-apnea">
+                <label for="sleep-apnea">Sleep Apnea</label>
+            </div>
+            <div>
+                <input type="checkbox" id="ulcers">
+                <label for="ulcers">Ulcers</label>
+            </div>
+                     
+        </div>
+    </div>
+
+    <div class="box">
+        <h2>Symptoms:</h2>
+        <div class="box-content">
+            <div>
+                <input type="checkbox" id="fever" name="symptoms" value="Fever">
+                <label for="fever">Fever</label>
+            </div>
+            <div>
+                <input type="checkbox" id="cough" name="symptoms" value="Cough">
+                <label for="cough">Cough</label>
+            </div>
+            <div>
+                <input type="checkbox" id="shortness-of-breath" name="symptoms" value="Shortness of Breath">
+                <label for="shortness-of-breath">Shortness of Breath</label>
+            </div>
+            <div>
+                <input type="checkbox" id="fatigue" name="symptoms" value="Fatigue">
+                <label for="fatigue">Fatigue</label>
+            </div>
+            <div>
+                <input type="checkbox" id="headache" name="symptoms" value="Headache">
+                <label for="headache">Headache</label>
+            </div>
+            <div>
+                <input type="checkbox" id="sore-throat" name="symptoms" value="Sore Throat">
+                <label for="sore-throat">Sore Throat</label>
+            </div>
+            <div>
+                <input type="checkbox" id="body-aches" name="symptoms" value="Body Aches">
+                <label for="body-aches">Body Aches</label>
+            </div>
+            <div>
+                <input type="checkbox" id="sweating" name="symptoms" value="Sweating">
+                <label for="sweating">Sweating</label>
+            </div>
+            <div>
+                <input type="checkbox" id="stuffy/runny nose" name="symptoms" value="Runny or Stuffy Nose">
+                <label for="stuffy/runny nose">Runny/Stuffy Nose</label>
+            </div>
+            <div>
+                <input type="checkbox" id="sneezing" name="symptoms" value="Sneezing">
+                <label for="sneezing">Sneezing</label>
+            </div>
+            <div>
+                <input type="checkbox" id="loss-of-smell" name="symptoms" value="Loss of Taste or Smell">
+                <label for="loss-of-smell">Loss of Taste or Smell</label>
+            </div>
+            <div>
+                <input type="checkbox" id="nausea/vomitting" name="symptoms" value="Nausea or Vomiting">
+                <label for="nausea/vomitting">Nausea or Vomiting</label>
+            </div>
+            <div>
+                <input type="checkbox" id="diarrhea" name="symptoms" value="Diarrhea">
+                <label for="diarrhea">Diarrhea</label>
+            </div>
+            <div>
+                <input type="checkbox" id="constipation" name="symptoms" value="Constipation">
+                <label for="constipation">Constipation</label>
+            </div>
+            <div>
+                <input type="checkbox" id="abdominal-pain" name="symptoms" value="Abdominal Pain">
+                <label for="abdominal-pain">Abdominal Pain</label>
+            </div>
+            <div>
+                <input type="checkbox" id="chest-pain" name="symptoms" value="Chest Pain">
+                <label for="chest-pain">Chest Pain</label>
+            </div>
+            <div>
+                <input type="checkbox" id="rapid-hearbeat" name="symptoms" value="Rapid Heartbeat">
+                <label for="rapid-hearbeat">Rapid Heartbeat</label>
+            </div>
+            <div>
+                <input type="checkbox" id="dizziness" name="symptoms" value="Dizziness">
+                <label for="dizziness">Dizziness</label>
+            </div>
+            <div>
+                <input type="checkbox" id="weight-change" name="symptoms" value="Weight Loss/Gain">
+                <label for="weight-change">Weight Loss or Gain</label>
+            </div>
+            <div>
+                <input type="checkbox" id="hair-loss" name="symptoms" value="Hair Loss">
+                <label for="hair-loss">Hair Loss</label>
+            </div>
+            <div>
+                <input type="checkbox" id="skin-rash" name="symptoms" value="Skin Rash or Itching">
+                <label for="skin-rash">Skin Rash or Itching</label>
+            </div>
+            <div>
+                <input type="checkbox" id="swelling" name="symptoms" value="Swelling">
+                <label for="swelling">Swelling</label>
+            </div>
+            <div>
+                <input type="checkbox" id="difficulty-sleeping" name="symptoms" value="Difficulty Sleeping">
+                <label for="difficulty-sleeping">Difficulty Sleeping</label>
+            </div>
+            <div>
+                <input type="checkbox" id="appetite" name="symptoms" value="Loss of Appetite">
+                <label for="appetite">Loss of Appetite</label>
+            </div>
+            <div>
+                <input type="checkbox" id="frequent-urination" name="symptoms" value="Frequent Urination">
+                <label for="frequent-urination">Frequent Urination</label>
+            </div>
+            <div>
+                <input type="checkbox" id="difficulty-urinating" name="symptoms" value="Difficulty Urinating">
+                <label for="difficulty-urinating">Difficulty Urinating</label>
+            </div>
+            <div>
+                <input type="checkbox" id="blood-stool" name="symptoms" value="Blood in Stool or Urine">
+                <label for="blood-stool">Blood in Stool or Urine</label>
+            </div>
+            <div>
+                <input type="checkbox" id="bruising" name="symptoms" value="Bruising">
+                <label for="bruising">Bruising</label>
+            </div>
+            <div>
+                <input type="checkbox" id="joint-issues" name="symptoms" value="Joint Pain or Stiffness">
+                <label for="joint-issues">Joint Pain or Stiffness</label>
+            </div>
+            <div>
+                <input type="checkbox" id="muscle-weakness" name="symptoms" value="Muscle Weakness">
+                <label for="muscle-weakness">Muscle Weakness</label>
+            </div>
+            <div>
+                <input type="checkbox" id="memory-issues-or-confusion" name="symptoms" value="Memory Problems or Confusion">
+                <label for="memory-issues-or-confusion">Memory Problems or Confusion</label>
+            </div>
+            <div>
+                <input type="checkbox" id="tinnitus" name="symptoms" value="Tinnitus (Ringing in the Ears)">
+                <label for="tinnitus">Tinnitus (Ringing in the Ears)</label>
+            </div>
+            <div>
+                <input type="checkbox" id="hearing-loss" name="symptoms" value="Hearing Loss">
+                <label for="hearing-loss">Hearing Loss</label>
+            </div>
+            <div>
+                <input type="checkbox" id="vision-problems" name="symptoms" value="Vision Problems">
+                <label for="vision-problems">Vision Problems</label>
+            </div>
+            <div>
+                <input type="checkbox" id="dry-eyes" name="symptoms" value="Dry or Itchy Eyes">
+                <label for="dry-eyes">Dry or Itchy Eyes</label>
+            </div>
+            <div>
+                <input type="checkbox" id="excess-thirst" name="symptoms" value="Excessive Thirst">
+                <label for="excess-thirst">Excessive Thirst</label>
+            </div>
+            <div>
+                <input type="checkbox" id="infections" name="symptoms" value="Frequent Infections">
+                <label for="infections">Frequent Infections</label>
+            </div>
+            <div>
+                <input type="checkbox" id="slow-wound-healing" name="symptoms" value="Slow Wound Healing">
+                <label for="slow-wound-healing">Slow Wound Healing</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="query-box" id="customQueryBox">
+        <h2>Custom Query:</h2>
+        <textarea type="text" id="queryInput" rows=2 placeholder="Enter your query here..."></textarea>
+        <div>
+            <button id="validateQuery" disabled>Validate</button>
+            <button id="clearQuery">Clear Query</button>
+        </div>
+    </div>
+
+    <div class="checklistbuttons">
+        <button id="submitChecklist">Submit</button>
+        <button id="clearForm">Reset Form</button>
+    </div>
+    
+</body>

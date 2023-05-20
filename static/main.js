@@ -1,0 +1,422 @@
+healthData = null;
+
+let isFetching = false;
+
+const fetchWithTimeout = (url, options, timeout = 5000) => {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+  
+    const optionsWithSignal = {...options, signal: controller.signal};
+  
+    return fetch(url, optionsWithSignal).finally(() => clearTimeout(id));
+  };
+
+function compareDicts(dict1, dict2) {
+    for (let key of Object.keys(dict1['Patient'])) {
+        if (dict1['Patient'][key] !== dict2['Patient'][key]) {
+            return false;
+        }
+    }
+    if  (dict1['Conditions'].length !== dict2['Conditions'].length || dict1['Conditions'].every((val,index) => val !== dict2['Conditions'][index]) || dict2['Conditions'].every((val,index) => val !== dict1['Conditions'][index])) {
+        return false;
+    }
+    if (dict1['Query'] !== dict2['Query']) {
+        return false;
+    }
+    return true;
+};
+
+
+document.addEventListener("keyup", function(event) {
+    if (event.target.id === 'queryInput'){
+        var txtInput = document.getElementById("queryInput").value;
+        var validButton = document.getElementById('validateQuery')
+        validButton.textContent = 'Validate'
+        if (txtInput.length >0) {
+            validButton.removeAttribute("disabled")
+        }
+        else {
+            validButton.setAttribute('disabled',null)
+        }
+    }})
+
+// code for clicking items that don't exist in initial page (verify clear query, submit, clear form, close)
+document.addEventListener('click', function(event) {
+    if (event.target.id === 'validateQuery'){
+    event.preventDefault();
+    let validButton = document.getElementById('validateQuery');
+    validButton.textContent = "Please wait..";
+    document.body.style.cursor = 'wait'; 
+    var query = document.getElementById('queryInput').value;
+    fetch('/validate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'query=' + encodeURIComponent(query),
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(error => console.error('Error:', error));
+        }
+        return response.json();})
+    .catch(error => {
+        console.error('Error converting response to JSON:', error);
+        document.body.style.cursor = 'default';
+        return {};
+
+    })
+    .then(data => {
+        document.body.style.cursor = 'default';
+        var valid = data['valid']
+        if (valid==='True') {
+            validButton.textContent = "VALID!"
+            validButton.setAttribute('disabled',null)
+        }
+        else {
+            validButton.textContent = "Invalid!"
+            validButton.setAttribute('disabled',null)
+            let modal = document.getElementById('validModal');
+            modal.textContent = "That query is not valid! Please limit query to medical/health concerns or consider rephrasing."
+            modal.style.display = "block";
+            window.onclick = function(event) {
+                modal.style.display = "none";
+        }}})}
+
+    // code for clearing query box
+    else if (event.target.id === "clearQuery") { 
+        document.getElementById('queryInput').value = '';
+        document.getElementById('validateQuery').textContent = 'Validate';
+        document.getElementById('validateQuery').setAttribute('disabled',null);
+}
+    //clear form
+    else if (event.target.id === 'clearForm') {
+        healthData = null;
+        loadChecklist();
+        }
+
+    // code for closing checklist    
+    else if (event.target.id === 'modal-close') {
+        document.getElementById('myModal').style.display = "none";
+      }
+    })
+
+// Code for calling main GPT function after clicking Submit (now moved to submit checklist)
+function submitQuery(query) {
+    isFetching = true;
+    document.getElementById('result1').innerHTML = '';
+    document.getElementById('result2').innerHTML = '';
+    document.body.style.cursor = 'wait';
+    document.getElementById('notes-container').style.display = 'flex';
+    document.getElementById('Instructions').textContent = "Getting lab tests.. this could take a minute.";
+    document.getElementById('messages').textContent = "Getting lab tests.. this could take a minute.";
+    document.getElementById('notes').textContent = "Please note that the lab tests that are returned here may be inconsistent or inaccurate. Additionally, other laboratory or non-laboratory tests that are not offered here may be more appropriate. It is recommended that you consult with a qualified healthcare provider to determine what lab tests are most appropriate for your specific medical needs.";
+
+    let data = {query: query }
+    fetch('/process', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => {
+        document.body.style.cursor = 'default';
+        if (!response.ok) {
+            // if the status is 422, log the response body
+            return response.json().then(error => console.error('Error:', error));
+        }
+        return response.json();})
+    .catch(error => {
+        console.error('Error converting response to JSON:', error);
+        document.getElementById('Instructions').innerHTML = 'Something went wrong with returning lab tests. Please try again.<br>Click on "Add health data" then fill out and submit the form to get assistance with lab test selection.';
+        return {};
+    })
+    .then(data => {
+        if (Object.keys(data).length === 0) {
+            // If the data is empty, update the message
+            document.getElementById('Instructions').innerHTML = 'Something went wrong with returning lab tests. Please try again.<br>Click on "Add health data" then fill out and submit the form to get assistance with lab test selection.';
+        } 
+        else {
+        document.getElementById('Instructions').innerHTML = "Here are lab tests that may be helpful given your clinical history and concerns.<br>Please click on a lab test to see why.";
+
+        document.getElementById('messages').innerHTML = "Here are lab tests that may be helpful given your clinical history and concerns.<br>Please click on a lab test to see why.";
+
+        var result1Div = document.getElementById('result1');
+        var result2Div = document.getElementById('result2');
+        var gptTestsDict = data["GPT tests"];
+        var panelsDict = data["Panels"];
+        var br = document.createElement('br');
+
+        for (var key in gptTestsDict) {
+            var a = document.createElement('a');
+            a.innerHTML = gptTestsDict[key] + "<br>";
+            a.style.cursor = 'pointer;'
+            a.addEventListener('click',createLinkClickHandler(query, data['Dicts']));
+            result1Div.appendChild(a);
+            result1Div.appendChild(document.createElement('br'));
+        }
+       
+        for (var key in panelsDict) {
+            var p = document.createElement('p');
+            p.innerHTML = '<span class="bold-key">' + key + ':';
+            var i = document.createElement('div');
+            i.className = 'indented-item';
+            panelsDict[key].forEach((item,index) => {
+                var a = document.createElement('a');
+                a.addEventListener('click',createLinkClickHandler(query, data['Dicts']));
+                a.innerHTML = item;
+                i.appendChild(a);
+            })
+                        
+            result2Div.appendChild(p);
+            result2Div.appendChild(i);
+            result2Div.appendChild(br);
+        }
+}})
+    .catch((error) => {
+      console.error('Error:', error);
+      document.body.style.cursor = 'default';
+    })
+    .finally(() => {isFetching=false;});
+};
+
+// Code for clikcing Start Over
+document.getElementById('refresh').addEventListener('click', function() {
+    location.reload();
+});
+
+// code for clicking on test links
+function createLinkClickHandler(query, data) {
+    return function handleLinkClick(event) {
+        if (isFetching) return;
+        isFetching = true;
+
+        event.preventDefault();
+        document.body.style.cursor = 'wait';
+        var clickedText = event.target.textContent;
+        document.getElementById('messages').textContent = "Getting lab test rationale.. please wait.";
+        document.getElementById('Instructions').textContent = "Getting lab test rationale.. please wait.";
+        colorLinkHandler(clickedText, data);
+        fetchWithTimeout('/test-reasons', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'query=' + encodeURIComponent(query) + '&clickedText=' + encodeURIComponent(clickedText),
+        })
+        .then(response => {
+            document.body.style.cursor = 'default';
+            if (!response.ok) {
+                document.getElementById('Instructions').innerHTML = 'There was a problem with the network.<br> Please try again.'
+                document.getElementById('messages').innerHTML = 'There was a problem with the network.<br> Please try again.'
+                throw new Error('There was a problem with the network. Please try again.')
+            }
+            return response.text()})
+        
+        .then(data => {
+            // Handle the response data here
+            document.getElementById('messages').innerHTML = data;
+            document.getElementById('Instructions').innerHTML = 'See lab test rationale below.<br> Click on another test to get reasons for test.'
+            document.getElementById('messages').scrollIntoView({behavior: 'smooth' });
+            
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            document.body.style.cursor = 'default';
+        })
+        .finally(() => {isFetching=false;});
+    }};
+
+// code to color all equivalent links green after clicking
+function colorLinkHandler(clickedText,data) {
+    equivalentNames = [clickedText];
+    if (data[0].indexOf(clickedText) != -1 && data[1].indexOf(clickedText) !== -1) {}
+    else if (data[0].indexOf(clickedText) != -1) {
+            equivalentNames.push(data[1][data[0].indexOf(clickedText)])     }
+    else {
+        equivalentNames.push(data[0][data[1].indexOf(clickedText)])    }
+
+    let links = document.getElementsByTagName("a");
+            // Select all links with the equivalent name
+    for (let i = 0; i < links.length; i++) {
+        let linkText = links[i].textContent;
+        for (let j = 0; j < equivalentNames.length; j++) {
+            if (linkText.indexOf(equivalentNames[j]) !== -1) {
+                links[i].style.color = "green";
+                break;}
+        }}}
+
+// code for loading the checklist on click of Add health data or clearing checklist (both use fuction loadChecklist)
+
+document.getElementById("addInfo").addEventListener("click", loadChecklist);
+
+function loadChecklist() {
+    if (isFetching) return;
+    fetch('static/checklist.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('modal-content-id').innerHTML = data;
+
+            // setting checklist values to those in the global healthData variable
+            if (healthData != null) {
+                Object.keys(healthData['Patient']).forEach(key => {
+                    if (healthData['Patient'][key] !== '') {
+                        document.getElementById(key).value = healthData['Patient'][key];
+                    }
+                })
+                if (healthData['Conditions'].length >0) {
+                    healthData['Conditions'].forEach(cond =>{
+                        document.getElementById(cond).checked = true;
+                    })    
+                }
+                if (healthData['Query'].length >0) {
+                    document.getElementById('queryInput').textContent = healthData['Query'];
+                    document.getElementById('validateQuery').textContent = 'VALID!';
+                    document.getElementById('validateQuery').setAttribute('disabled',null);
+                }
+            }
+
+            document.getElementById('myModal').style.display = "block";
+            const boxContents = document.querySelectorAll('.box-content');
+
+            boxContents.forEach((boxContent) => {
+                Array.from(boxContent.children)
+                    .sort((a, b) => a.textContent.localeCompare(b.textContent))
+                    .forEach(node => boxContent.appendChild(node));
+                });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+  // code for submitting checklist
+document.addEventListener('click', function(event) {
+    if (event.target.id === 'submitChecklist'){
+        event.stopPropagation();
+        var healthDict = {};
+        healthDict['Patient'] = {}
+        var checkboxes = document.querySelectorAll('#modal-content-id input[type="checkbox"]');
+        var checkedValues = Array.from(checkboxes).filter(checkbox => checkbox.checked).map(checkbox => checkbox.id);
+        healthDict['Conditions'] = checkedValues
+        var dropDowns = Array.from(document.querySelectorAll('#modal-content-id select.drop-down'));
+        dropDowns.forEach(function(dropdown) {
+            healthDict['Patient'][dropdown.id] = dropdown.value;
+        });
+        healthDict['Query'] = document.getElementById('queryInput').value;
+
+        let modal = document.getElementById('validModal');
+
+        if (Object.values(healthDict['Patient']).every(value => value == '') && healthDict['Conditions'].length == 0 && healthDict['Query'].length == 0){
+
+            console.log('no data');
+            let modal = document.getElementById('validModal');
+            modal.textContent = 'Cannot submit an empty questionnaire! Please add information then click "Submit"'
+            console.log(modal.textContent)
+            modal.style.display = "block";
+            window.onclick = function(event) {
+                modal.style.display = "none";
+            }
+        }
+        else if (healthDict['Query'].length >0 && document.getElementById('validateQuery').textContent !== 'VALID!') {
+            modal.textContent = 'Please validate or remove query before clicking Submit';
+            console.log(modal.textContent);
+            modal.style.display = "block";
+            window.onclick = function(event) {
+                modal.style.display = "none";
+        }}
+
+        else if (healthData != null && compareDicts(healthDict,healthData) == true) {
+            console.log('healtDict and healthData are equal');
+            modal.textContent = 'No changes have been made to the form. Please make changes before submitting or press the "X" at the top right to exit.'
+            modal.style.display = "block";
+            window.onclick = function(event) {
+                modal.style.display = "none";
+            }
+        }
+
+        else {
+            healthData = healthDict;
+            document.getElementById('myModal').style.display = "none";
+            fetch('/build-query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(healthDict),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        // if the status is 422, log the response body
+                        return response.json().then(error => console.error('Error:', error));
+                    }
+                    return response.json();})
+                .catch(error => {
+                    console.error('Error converting response to JSON:', error);
+                    return {};
+                })
+                .then(data => {
+                    document.getElementById('input-container').style.display = 'flex';
+                    document.getElementById('query').textContent = data['Query'];
+
+                    // pass data to the main GPT function
+                    submitQuery(data['Query']);
+                })
+        }
+    }})
+
+
+// code to click and drag modal-window
+document.addEventListener('mousedown', function(event){
+    if (event.target.id == 'modal-draggable') {
+
+        var box = document.getElementById('modal-content-id');
+        var modal = document.getElementById('myModal');
+        var header = box.getElementsByClassName('modal-draggable')[0];
+        var shiftX = event.clientX - box.getBoundingClientRect().left;
+        var shiftY = event.clientY - box.getBoundingClientRect().top;
+
+        box.style.position = 'absolute';
+        box.style.zIndex = 1000;
+
+        function moveAt(pageX, pageY) {
+            // Ensure modal doesn't move beyond the bounds of its parent
+            var parentRect = modal.getBoundingClientRect();
+            var boxRect = box.getBoundingClientRect();
+            var newLeft = pageX - shiftX;
+            var newTop = pageY - shiftY;
+
+            if (newLeft < parentRect.left) {
+                newLeft = parentRect.left;
+            } else if (newLeft + boxRect.width > parentRect.right) {
+                newLeft = parentRect.right - boxRect.width;
+            }
+            
+            if (newTop < parentRect.top) {
+                newTop = parentRect.top;
+            } else if (newTop + boxRect.height > parentRect.bottom) {
+                newTop = parentRect.bottom - boxRect.height;
+            }
+
+            box.style.left = newLeft + 'px';
+            box.style.top = newTop + 'px';
+        }
+
+        moveAt(event.pageX, event.pageY);
+
+        function onMouseMove(event) {
+            moveAt(event.pageX, event.pageY);
+        }
+
+        document.addEventListener('mousemove', onMouseMove);
+
+        document.onmouseup = function() {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.onmouseup = null;
+        };
+        header.ondragstart = function() {
+        return false;
+        };
+    }
+})
