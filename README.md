@@ -11,7 +11,7 @@ To run,
 6. In the .env file set the openai api key as:
   OPENAI_API_KEY = 'your OpenAI api key' - get this from [openai.com](https://platform.openai.com/account/api-keys)
 5. From your virtual environment in console run
-      python -m uvicorn main:app --reload
+      uvicorn main:app --reload
 6. Navigate in browswer to http://127.0.0.1.8000
 7. The API interface should now be available
  
