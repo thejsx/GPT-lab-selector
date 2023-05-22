@@ -7,15 +7,17 @@
     <title>Medical Questionnaire</title>
   </head>
 <body>  
-    <div class="modal-draggable" id="modal-draggable">Click to Drag Checklist</div> 
+    <div class="modal-draggable" id="modal-draggable">Click to drag checklist</div> 
 
     <div class="header">
-        <h1>Medical Questionnaire</h1>
-        <span class="modal-close" id="modal-close">&times;</span>
+        <div id="checklistTitle">
+            <h2>Medical Questionnaire</h2>
+        </div>
+        <span id="modal-close">&times;</span>
     </div>
 
     <div class="first-box">
-        <h2>Personal information:</h2>
+        <h3>Personal information:</h3>
         <div class="first-box-content">
             <div>
                 <label for="gender">Gender:</label>
@@ -57,9 +59,8 @@
             </div>
         </div>
     </div>
-
+    <h3>Diagnoses:</h3>
     <div class="box">
-        <h2>Diagnoses:</h2>
         <div class="box-content">
             <div>
                 <input type="checkbox" id="diabetes" name="diagnoses" value="Diabetes">
@@ -91,7 +92,7 @@
             </div>
             <div>
                 <input type="checkbox" id="anemia">
-                <label for="anemia">Anemia (Low Iron)</label>
+                <label for="anemia">Anemia</label>
             </div>
             <div>
                 <input type="checkbox" id="allergies">
@@ -111,11 +112,11 @@
             </div>
             <div>
                 <input type="checkbox" id="GERD">
-                <label for="GERD">Acid Reflux / GERD</label>
+                <label for="GERD">Acid Reflux</label>
             </div>
             <div>
                 <input type="checkbox" id="depression-anxiety">
-                <label for="depression-anxiety">Depression/Anxiety</label>
+                <label for="depression-anxiety">Depression/ Anxiety</label>
             </div>
             <div>
                 <input type="checkbox" id="ADHD">
@@ -151,7 +152,7 @@
             </div>
             <div>
                 <input type="checkbox" id="eating-disorder">
-                <label for="eating-disorder">Eating Disorders (like Anorexia, Bulimia)</label>
+                <label for="eating-disorder">Eating Disorder</label>
             </div>
             <div>
                 <input type="checkbox" id="eczema">
@@ -226,15 +227,14 @@
                 <label for="sleep-apnea">Sleep Apnea</label>
             </div>
             <div>
-                <input type="checkbox" id="ulcers">
-                <label for="ulcers">Ulcers</label>
+                <input type="checkbox" id="stomach-ulcers">
+                <label for="stomach-ulcers">Stomach Ulcer</label>
             </div>
                      
         </div>
     </div>
-
+    <h3>Symptoms:</h3>
     <div class="box">
-        <h2>Symptoms:</h2>
         <div class="box-content">
             <div>
                 <input type="checkbox" id="fever" name="symptoms" value="Fever">
@@ -358,11 +358,11 @@
             </div>
             <div>
                 <input type="checkbox" id="memory-issues-or-confusion" name="symptoms" value="Memory Problems or Confusion">
-                <label for="memory-issues-or-confusion">Memory Problems or Confusion</label>
+                <label for="memory-issues-or-confusion">Memory Loss/Confusion</label>
             </div>
             <div>
                 <input type="checkbox" id="tinnitus" name="symptoms" value="Tinnitus (Ringing in the Ears)">
-                <label for="tinnitus">Tinnitus (Ringing in the Ears)</label>
+                <label for="tinnitus">Tinnitus (Ringing in Ears)</label>
             </div>
             <div>
                 <input type="checkbox" id="hearing-loss" name="symptoms" value="Hearing Loss">
@@ -392,17 +392,18 @@
     </div>
 
     <div class="query-box" id="customQueryBox">
-        <h2>Custom Query:</h2>
-        <textarea type="text" id="queryInput" rows=2 placeholder="Enter your query here..."></textarea>
+        <h3>Query:</h3>
+        <textarea type="text" id="queryInput" rows=2 placeholder='Enter your custom query here then click "Validate"'></textarea>
         <div>
-            <button id="validateQuery" disabled>Validate</button>
-            <button id="clearQuery">Clear Query</button>
+            <button id="validateQuery"  disabled>Validate</button>
+            <button id="clearQuery" >Remove</button>
         </div>
     </div>
 
     <div class="checklistbuttons">
-        <button id="submitChecklist">Submit</button>
-        <button id="clearForm">Reset Form</button>
+        <button id="cancel" >Cancel</button>
+        <button id="clearForm" >Reset Form</button>
+        <button id="submitChecklist" >Submit</button>
     </div>
     
 </body>

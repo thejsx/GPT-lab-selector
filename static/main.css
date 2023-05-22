@@ -1,19 +1,27 @@
 body {
-    background-color:white;
+    background-color:rgb(139, 182, 184);
     color:black;
+    overflow-y: auto;
  }
 
-.instructions-container {
-    font-size: 18px;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    display: flex;
-    padding:20px;
+ #API-title {
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    color:black;
+    font-weight: 800;
+    display: block;
 }
 
-#API-title {
-    color:black;
+.instructions-container {
+    background-color: white;
+    border: 1px solid black;
+    align-items: center;
+    justify-content: center;
+    margin: 1vh auto 1vh auto;
+    width: fit-content;
+    display: flex;
+    padding:2%;
+    height: fit-content;
 }
 
 #Instructions {
@@ -32,29 +40,26 @@ body {
 
 
 #query {
+    background-color: white;
     border: 1px solid blue;
-    padding: 10px;
-    width: 80vw;
+    padding: 2vw;
+    width: fit-content;
     max-width: 800px;
-    font-size: 14px;
 }
 
-#API-title {
-    font-size: 24px;
-    font-weight: 800;
-    text-align: center; /* Center align the text in the label */
-    display: block;}
-
-.myButton {
-    width: 135px;  /* adjust as needed */
-    height: 25px;  /* adjust as needed */
-    font-size: 16px;  /* adjust as needed */
-    margin-top: 5px; 
-}
 
 #button-container {
     display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 10px; /* Add a gap between buttons */
+}
+
+#second-button-container {
+    display: none;
+    margin-top: 2vh;
+    justify-content: center;
+    align-items: center;
     gap: 10px; /* Add a gap between buttons */
 }
 
@@ -64,45 +69,65 @@ body {
 
 .message-container {
     display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    padding: 15px;
-    font-size: 14px;
-    gap: 20px;
-    
+    justify-content: center;
+    align-items: center;
+    width: 100%;       
 }
 
-.message-container h2 {
-    font-family: Helvetica;
-    min-width: max-content;
-    margin: 0px;
-}
-
-.message-title {
-    margin-right: 50px; /* adjust as needed */
-}
 
 #messages {
-    font-size: 20px;
+    background-color: white;
     border: 1px solid green;
-    padding: 15px;
-    width: 80%
+    padding: 3vw;
+    width: fit-content;
 }
 
 .results-container {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    grid-column-gap: 2vw;
     justify-content: space-evenly;
-    padding: 0 10px;  /* adjust as needed */
+    width: fit-content;
+    max-width: 95vw;
+    margin: 3vh auto 2.5vh auto;
 }
 
-
 #result1, #result2 {
+    overflow-wrap: break-word;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 1vh;
     border: 1px solid red;
-    padding: 20px;
-    flex-grow: 1; /* Grow equally, fill available space */
-    flex-shrink: 1; /* Shrink equally, prevent overflow */
-    flex-basis: 0; /* Don't consider width or content, just look at flex grow/shrink */
-    margin: 10px;
+    padding: 1.5vw;
+    margin-top: 1vh;
+    width: fit-content;
+    min-width: 25vw;
+}
+
+.panel {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.bold-key {
+    font-weight: bold;
+    margin: 0;
+}
+
+.indented-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2vw;
+    padding-left: 15px;
+    font-weight: 100;
+}
+
+#result2 p {
+    margin: 0;
 }
 
 a:hover {
@@ -110,50 +135,22 @@ a:hover {
 }
 
 #notes-container {
+    margin-top: 3vh;
     display: none;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    padding: 20px;
-    margin-bottom: 20px;
+    width: 100%;
 }
 
 #notes {
+    background-color: white;
     border: 1px solid black;
-    font-size: 20px;   
-    padding: 20px;
-    font-weight: 800;
+    padding: 3vw;   
+    font-weight: 600;
     width: 80%;
 
 }
 
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-
-.bold-key {
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.indented-item {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    padding-left: 15px;
-    font-size: 14px;
-    font-weight: 100;
-}
 
 .modal {
     display: none; /* Hidden by default */
@@ -161,6 +158,8 @@ a:hover {
     z-index: 1; /* Sit on top */
     left: 0;
     top: 0;
+    justify-content: center;
+    align-items: center;
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     background-color: rgb(0,0,0); /* Fallback color */
@@ -173,15 +172,14 @@ a:hover {
     flex-direction: column;  /* Stack the children vertically */
     flex-grow: 1;
     background-color: #fefefe;
-    margin: auto;
     padding: 0px;
     border: 1px solid #888;
-    max-width: 90%; 
-    height: 85vh;
-    max-height: fit-content;
+    max-width: 90%;
+    min-height: 450px;
+    height: fit-content;
+    max-height: 95vh;
     resize: both;
     box-sizing: border-box;
-    min-height: 450px;
     overflow: auto;
   }
 
@@ -194,34 +192,45 @@ a:hover {
     cursor: pointer;
 }
 
-.modal-close {
-    color: red;
-    cursor: pointer;
-    font-size: 30px;
-}
-
 .header{
     display:flex;
     align-items: center;
     justify-content: space-between;
 }
 
-#submitChecklist, #clearForm {
-    display: center;
-    width: max-content;
-    font-size: 14px;
-    margin: 1px;
+#checklistTitle {
+    width: 100%;
+    align-items: center;
 }
+
+.close {
+    color: #aaa;
+    float: right;
+    border: black 2px;
+    width: fit-content;
+    height: fit-content;
+  }
+
+#modal-close {
+    color: red;
+    cursor: pointer;
+    font-size: 40px;
+    font-weight: 800;
+}
+  
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
 
 .checklistbuttons {
     text-align: center;
-    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 2%;
 } 
-
-.box *, .query-box * {
-    font-size: 12px;
-    box-sizing: border-box;
-}
 
 .first-box{
     padding: 0 0 5px 15px;
@@ -247,14 +256,13 @@ a:hover {
     padding: 1% 0 1% 1%;
 }
 
-.box h2, .first-box h2, .query-box h2 {
+h2, h3 {
     text-align: center;
-    font-size: 16px;
+    margin:0;
 }
 h1 {
     text-align: center;
     flex-grow: 1;
-    font-size: 20px;
     margin: 0px;
 }
 
@@ -291,14 +299,15 @@ h1 {
     max-height: 80px;
 }
 
-
+.query-box h2 {
+    width: fit-content;
+}
 #queryInput {
     display: flex;
-    min-width: 50px;
+    min-width: 200px;
     overflow-y: auto;
-    word-break: break-all;
+    overflow-wrap: break-word;
     resize: none;
-    font-size: 14px;
     flex-grow: 1;
 }
 
@@ -306,10 +315,9 @@ h1 {
     display: flex;
     flex-direction: column;
     width:fit-content;
+    gap: 2%;
 }
-#validateQuery, #clearQuery {
-    width:fit-content;
-}
+
 
 .validModal {
     display: none; /* Hidden by default */
@@ -327,3 +335,93 @@ h1 {
     border: 1px solid #888;
 }
 
+/* Loading screen */
+
+.loading {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(128, 128, 128, 0.5);
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .spinner {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #3498db;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+
+/* button styling */
+.myButton {
+    background-color: #008CBA; /* Set a background color */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white; /* Set the text color */
+    padding: 14px 20px; /* Add some padding */
+    margin: 0 0; /* Add some margin */
+    border: none; /* Remove border */
+    cursor: pointer; /* Change cursor on hover */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 16px; /* Set a font size */
+    font-weight: bold;
+    transition: background-color 0.3s ease; /* Add transition */
+  }
+  
+  .myButton:hover {
+    background-color: #007B9A; /* Change background color on hover */
+  }
+  
+  .myButton:active {
+    background-color: #005C6C; /* Change background color on click */
+    box-shadow: 0 5px #002D33; /* Add box shadow */
+    transform: translateY(4px); /* Move button 4px down */
+  }
+  
+
+  /* dealing with larger screens */
+  body {
+    font-size: 16px; /* Default font size for smaller screens */
+  }
+  
+  @media (min-width: 768px) {
+    body {
+      font-size: 18px; /* Increased font size for screens 768px and wider */
+    }
+    .box, .drop-down, #queryInput, .checklistbuttons button, .query-box div button {
+        font-size: 14px;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    body {
+      font-size: 20px; /* Even larger font size for screens 1024px and wider */
+    }
+    .box, .drop-down, #queryInput, .checklistbuttons button, .query-box div button {
+        font-size: 16px;
+    }
+  }
+
+  @media (min-width: 1350px) {
+    body {
+      font-size: 24px; /* Even larger font size for screens 1024px and wider */
+    }
+    .box, .drop-down, #queryInput, .checklistbuttons button, .query-box div button {
+        font-size: 18px;
+    }
+  }
+  

@@ -36,7 +36,7 @@ async def process_query(query: models.QueryData = Body(...)):
 async def test_query(query: str = Form(...), clickedText: str = Form(...)):
     reply = gpt_funcs.test_explanation(query,clickedText)
     # return Response(f'{clickedText}:<br/>{reply}', media_type='text/plain')
-    return Response(f'<span style="font-weight:bold; font-size:16px;">{clickedText}:</span><br><span style="font-weight:normal; font-size:15px;">{reply}</span>',media_type='text/plain')
+    return Response(f'<span style="font-weight:bold;">{clickedText}:</span><br><span style="font-weight:normal;">{reply}</span>',media_type='text/plain')
 
 @app.post('/validate')
 async def validate_query(query: str = Form(...)):

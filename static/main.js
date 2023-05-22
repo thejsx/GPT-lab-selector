@@ -2,7 +2,7 @@ healthData = null;
 
 let isFetching = false;
 
-const fetchWithTimeout = (url, options, timeout = 5000) => {
+const fetchWithTimeout = (url, options, timeout = 6000) => {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
   
@@ -10,6 +10,15 @@ const fetchWithTimeout = (url, options, timeout = 5000) => {
   
     return fetch(url, optionsWithSignal).finally(() => clearTimeout(id));
   };
+
+function modalDialouge(text) {
+    modal = document.getElementById('validModal')
+    modal.textContent = text;
+    console.log(modal.textContent);
+    modal.style.display = "block";
+    window.onclick = function(event) {
+        modal.style.display = "none";
+}}
 
 function compareDicts(dict1, dict2) {
     for (let key of Object.keys(dict1['Patient'])) {
@@ -76,40 +85,48 @@ document.addEventListener('click', function(event) {
         else {
             validButton.textContent = "Invalid!"
             validButton.setAttribute('disabled',null)
-            let modal = document.getElementById('validModal');
-            modal.textContent = "That query is not valid! Please limit query to medical/health concerns or consider rephrasing."
-            modal.style.display = "block";
-            window.onclick = function(event) {
-                modal.style.display = "none";
-        }}})}
+            modalDialouge("That query is not valid! Please limit query to medical/health concerns or consider rephrasing.");
+        }})
+    }
 
     // code for clearing query box
     else if (event.target.id === "clearQuery") { 
         document.getElementById('queryInput').value = '';
         document.getElementById('validateQuery').textContent = 'Validate';
-        document.getElementById('validateQuery').setAttribute('disabled',null);
-}
+        document.getElementById('validateQuery').setAttribute('disabled',null);}
+
     //clear form
     else if (event.target.id === 'clearForm') {
         healthData = null;
-        loadChecklist();
-        }
+        loadChecklist();        }
 
-    // code for closing checklist    
+    // code (x2) for closing checklist    
     else if (event.target.id === 'modal-close') {
-        document.getElementById('myModal').style.display = "none";
-      }
-    })
+        document.getElementById('myModal').style.display = "none";      }
+
+    else if (event.target.id === 'cancel') {
+        document.getElementById('myModal').style.display = "none";    }
+    
+    // code for second refresh button
+    else if (event.target.id === 'refresh2') {
+            location.reload();}
+    
+    // code for second add health data button
+    else if (event.target.id === 'addInfo2') {
+        loadChecklist();    }
+    } )
 
 // Code for calling main GPT function after clicking Submit (now moved to submit checklist)
 function submitQuery(query) {
     isFetching = true;
     document.getElementById('result1').innerHTML = '';
     document.getElementById('result2').innerHTML = '';
+
     document.body.style.cursor = 'wait';
+    var loading = document.querySelector('.loading');
+    loading.style.display = 'flex';
     document.getElementById('notes-container').style.display = 'flex';
     document.getElementById('Instructions').textContent = "Getting lab tests.. this could take a minute.";
-    document.getElementById('messages').textContent = "Getting lab tests.. this could take a minute.";
     document.getElementById('notes').textContent = "Please note that the lab tests that are returned here may be inconsistent or inaccurate. Additionally, other laboratory or non-laboratory tests that are not offered here may be more appropriate. It is recommended that you consult with a qualified healthcare provider to determine what lab tests are most appropriate for your specific medical needs.";
 
     let data = {query: query }
@@ -121,7 +138,6 @@ function submitQuery(query) {
         body: JSON.stringify(data),
     })
     .then(response => {
-        document.body.style.cursor = 'default';
         if (!response.ok) {
             // if the status is 422, log the response body
             return response.json().then(error => console.error('Error:', error));
@@ -129,62 +145,67 @@ function submitQuery(query) {
         return response.json();})
     .catch(error => {
         console.error('Error converting response to JSON:', error);
-        document.getElementById('Instructions').innerHTML = 'Something went wrong with returning lab tests. Please try again.<br>Click on "Add health data" then fill out and submit the form to get assistance with lab test selection.';
+        document.getElementById('Instructions').innerHTML = '<span style="font-weight:bold; color:red;">Something went wrong with returning lab tests. Please try again.<br>Click on "Add health data" then fill out and submit the form to get assistance with lab test selection.</span>';
+        modalDialouge('Something went wrong in returning lab tests. Please try again.')
         return {};
     })
     .then(data => {
         if (Object.keys(data).length === 0) {
             // If the data is empty, update the message
-            document.getElementById('Instructions').innerHTML = 'Something went wrong with returning lab tests. Please try again.<br>Click on "Add health data" then fill out and submit the form to get assistance with lab test selection.';
+            document.getElementById('Instructions').innerHTML = '<span style="font-weight:bold; color:red;">Something went wrong with returning lab tests. Please try again.<br>Click on "Add health data" then fill out and submit the form to get assistance with lab test selection.</span>';
+            modalDialouge('Something went wrong in returning lab tests. Please try again.');
         } 
         else {
         document.getElementById('Instructions').innerHTML = "Here are lab tests that may be helpful given your clinical history and concerns.<br>Please click on a lab test to see why.";
 
-        document.getElementById('messages').innerHTML = "Here are lab tests that may be helpful given your clinical history and concerns.<br>Please click on a lab test to see why.";
+        document.getElementById('messages').innerHTML = "Please click on a lab test above to get the rationale.";
 
         var result1Div = document.getElementById('result1');
         var result2Div = document.getElementById('result2');
         var gptTestsDict = data["GPT tests"];
         var panelsDict = data["Panels"];
-        var br = document.createElement('br');
 
         for (var key in gptTestsDict) {
             var a = document.createElement('a');
-            a.innerHTML = gptTestsDict[key] + "<br>";
+            a.innerHTML = gptTestsDict[key]
             a.style.cursor = 'pointer;'
             a.addEventListener('click',createLinkClickHandler(query, data['Dicts']));
             result1Div.appendChild(a);
-            result1Div.appendChild(document.createElement('br'));
         }
        
         for (var key in panelsDict) {
-            var p = document.createElement('p');
-            p.innerHTML = '<span class="bold-key">' + key + ':';
-            var i = document.createElement('div');
-            i.className = 'indented-item';
-            panelsDict[key].forEach((item,index) => {
-                var a = document.createElement('a');
-                a.addEventListener('click',createLinkClickHandler(query, data['Dicts']));
-                a.innerHTML = item;
-                i.appendChild(a);
+            var panel = document.createElement('div');
+            panel.className = 'panel';
+            var panelTitle = document.createElement('div');
+            panelTitle.innerHTML = '<span class="bold-key">' + key + ':' + '</span>';
+            panel.appendChild(panelTitle);
+            var tests = document.createElement('div');
+            tests.className = 'indented-item';
+            panelsDict[key].forEach((item) => {
+                var test = document.createElement('a');
+                test.style.cursor = 'pointer;'
+                test.addEventListener('click',createLinkClickHandler(query, data['Dicts']));
+                test.innerHTML = item;
+                tests.appendChild(test);
             })
-                        
-            result2Div.appendChild(p);
-            result2Div.appendChild(i);
-            result2Div.appendChild(br);
+            panel.appendChild(tests);
+            result2Div.appendChild(panel);
         }
 }})
     .catch((error) => {
       console.error('Error:', error);
-      document.body.style.cursor = 'default';
     })
-    .finally(() => {isFetching=false;});
+    .finally(() => {
+        isFetching=false;
+        document.getElementById('second-button-container').style.display = 'flex';
+        loading.style.display = 'none';
+        document.body.style.cursor = 'default';
+    });
 };
 
-// Code for clikcing Start Over
+// Code for clicking Start Over (1 or 2)
 document.getElementById('refresh').addEventListener('click', function() {
-    location.reload();
-});
+    location.reload();});
 
 // code for clicking on test links
 function createLinkClickHandler(query, data) {
@@ -194,9 +215,10 @@ function createLinkClickHandler(query, data) {
 
         event.preventDefault();
         document.body.style.cursor = 'wait';
+        var loading = document.querySelector('.loading');
+        loading.style.display = 'flex';
         var clickedText = event.target.textContent;
-        document.getElementById('messages').textContent = "Getting lab test rationale.. please wait.";
-        document.getElementById('Instructions').textContent = "Getting lab test rationale.. please wait.";
+        document.getElementById('Instructions').textContent = "Getting lab test rationale.. please wait";
         colorLinkHandler(clickedText, data);
         fetchWithTimeout('/test-reasons', {
             method: 'POST',
@@ -206,11 +228,10 @@ function createLinkClickHandler(query, data) {
             body: 'query=' + encodeURIComponent(query) + '&clickedText=' + encodeURIComponent(clickedText),
         })
         .then(response => {
-            document.body.style.cursor = 'default';
             if (!response.ok) {
-                document.getElementById('Instructions').innerHTML = 'There was a problem with the network.<br> Please try again.'
-                document.getElementById('messages').innerHTML = 'There was a problem with the network.<br> Please try again.'
-                throw new Error('There was a problem with the network. Please try again.')
+                document.getElementById('Instructions').innerHTML = '<span style="font-weight:bold; color:red;">There was a problem with the network.<br> Please try again.</span>';
+                modalDialouge('Something went wrong getting the test rationale. Please try again.');
+                throw new Error('There was a problem with the network. Please try again.');
             }
             return response.text()})
         
@@ -223,9 +244,14 @@ function createLinkClickHandler(query, data) {
         })
         .catch((error) => {
             console.error('Error:', error);
-            document.body.style.cursor = 'default';
+            document.getElementById('Instructions').innerHTML = '<span style="font-weight:bold; color:red;">There was a problem with the network.<br> Please try again.</span>';
+            modalDialouge('Something went wrong getting the test rationale. Please try again.');
         })
-        .finally(() => {isFetching=false;});
+        .finally(() => {
+            isFetching=false;
+            document.body.style.cursor = 'default';
+            loading.style.display = 'none';
+        });
     }};
 
 // code to color all equivalent links green after clicking
@@ -247,7 +273,7 @@ function colorLinkHandler(clickedText,data) {
                 break;}
         }}}
 
-// code for loading the checklist on click of Add health data or clearing checklist (both use fuction loadChecklist)
+// code for loading the checklist on click of Add health data (1 or 2) or clearing checklist (both use fuction loadChecklist)
 
 document.getElementById("addInfo").addEventListener("click", loadChecklist);
 
@@ -277,7 +303,7 @@ function loadChecklist() {
                 }
             }
 
-            document.getElementById('myModal').style.display = "block";
+            document.getElementById('myModal').style.display = "flex";
             const boxContents = document.querySelectorAll('.box-content');
 
             boxContents.forEach((boxContent) => {
@@ -306,34 +332,18 @@ document.addEventListener('click', function(event) {
         });
         healthDict['Query'] = document.getElementById('queryInput').value;
 
-        let modal = document.getElementById('validModal');
-
         if (Object.values(healthDict['Patient']).every(value => value == '') && healthDict['Conditions'].length == 0 && healthDict['Query'].length == 0){
 
             console.log('no data');
-            let modal = document.getElementById('validModal');
-            modal.textContent = 'Cannot submit an empty questionnaire! Please add information then click "Submit"'
-            console.log(modal.textContent)
-            modal.style.display = "block";
-            window.onclick = function(event) {
-                modal.style.display = "none";
-            }
+            modalDialouge('Cannot submit an empty questionnaire! Please add information then click "Submit"');
         }
         else if (healthDict['Query'].length >0 && document.getElementById('validateQuery').textContent !== 'VALID!') {
-            modal.textContent = 'Please validate or remove query before clicking Submit';
-            console.log(modal.textContent);
-            modal.style.display = "block";
-            window.onclick = function(event) {
-                modal.style.display = "none";
-        }}
-
-        else if (healthData != null && compareDicts(healthDict,healthData) == true) {
-            console.log('healtDict and healthData are equal');
-            modal.textContent = 'No changes have been made to the form. Please make changes before submitting or press the "X" at the top right to exit.'
-            modal.style.display = "block";
-            window.onclick = function(event) {
-                modal.style.display = "none";
+            modalDialouge('Please validate or remove query before clicking Submit');
             }
+
+        else if (healthData != null && compareDicts(healthDict,healthData) == true && document.getElementById('result1').textContent.length > 0) {
+            console.log('healtDict and healthData are equal');
+            modalDialouge('No changes have been made to the form. Please make changes before submitting or press the "X" at the top right to exit.');
         }
 
         else {

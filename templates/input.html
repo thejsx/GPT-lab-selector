@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Input Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="/static/main.css">
 </head>
 
@@ -25,24 +26,25 @@
 
     <div id="myModal" class="modal">
         <div id="modal-content-id" class="modal-content">
-            <div class="modal-draggable">Click to Drag Checklist</div>
+            <div class="modal-draggable">Click to drag Checklist if using mouse</div>
         </div>
     </div>
 
     <div class="results-container">
-        <div>
-            <h2>Tests that may be helpful:</h2>
-            <div id="result1"></div>
-        </div>
-        <div>   
-            <h2>Panels that include these tests:</h2>
-            <div id="result2"></div>
-        </div>
+        <h2>Helpful lab tests:</h2>
+        <h2>Helpful test panels:</h2>
+        <div id="result1"></div>
+        <div id="result2"></div>
     </div>
 
+    <h2>Lab Test Rationale: </h2>
     <div class="message-container">
-        <h2>Lab Test Description: </h2>
-        <div id="messages"></div>
+        <div id="messages">Add health data first to get helpful lab tests...</div>
+    </div>
+
+    <div id="second-button-container">
+        <input type="button" class="myButton" id="refresh2" value="Start Over">
+        <input type="button" class="myButton" id="addInfo2" value="Add health data">
     </div>
 
     <div id="notes-container">
@@ -52,6 +54,11 @@
     <div id="validModal" class="validModal">
         <p id="modal-valid-text"></p>
     </div>
+
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+    </div>
+      
 
     <script src="/static/main.js"></script>
 
