@@ -15,7 +15,6 @@ const fetchWithTimeout = (url, options, timeout = 6000) => {
 function modalDialouge(text) {
     modal = document.getElementById('validModal')
     modal.textContent = text;
-    console.log(modal.textContent);
     modal.style.display = "block";
     window.onclick = function(event) {
         modal.style.display = "none";
@@ -43,10 +42,14 @@ document.addEventListener("keyup", function(event) {
         var validButton = document.getElementById('validateQuery')
         validButton.textContent = 'Validate'
         if (txtInput.length >0) {
-            validButton.removeAttribute("disabled")
+            validButton.removeAttribute("disabled");
         }
         else {
-            validButton.setAttribute('disabled',null)
+            validButton.setAttribute('disabled',null);
+            return
+        }
+        if (txtInput.length == 280) {
+            modalDialouge('The query is at the maximum length (280 characters).')
         }
     }})
 
@@ -72,12 +75,10 @@ document.addEventListener('click', function(event) {
         return response.json();})
     .catch(error => {
         console.error('Error converting response to JSON:', error);
-        document.body.style.cursor = 'default';
         return {};
 
     })
     .then(data => {
-        document.body.style.cursor = 'default';
         var valid = data['valid']
         if (valid==='True') {
             validButton.textContent = "VALID!"
@@ -88,6 +89,9 @@ document.addEventListener('click', function(event) {
             validButton.setAttribute('disabled',null)
             modalDialouge("That query is not valid! Please limit query to medical/health concerns or consider rephrasing.");
         }})
+        .finally(() => {
+            document.body.style.cursor = 'default';
+        })
     }
 
     // code for clearing query box
@@ -214,7 +218,6 @@ function createLinkClickHandler(query, data) {
         if (isFetching) return;
         isFetching = true;
         var clickedText = event.target.textContent;
-        console.log(clickedText)
         equivalentNames = colorLinkHandler(clickedText, data);
         if (clickedText in labTests) {
             document.getElementById('messages').innerHTML = labTests[clickedText];
