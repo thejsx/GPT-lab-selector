@@ -1,4 +1,5 @@
-healthData = null;
+var healthData = null;
+var labTests = {};
 
 let isFetching = false;
 
@@ -121,7 +122,7 @@ function submitQuery(query) {
     isFetching = true;
     document.getElementById('result1').innerHTML = '';
     document.getElementById('result2').innerHTML = '';
-
+    labTests = {};
     document.body.style.cursor = 'wait';
     var loading = document.querySelector('.loading');
     loading.style.display = 'flex';
@@ -212,14 +213,22 @@ function createLinkClickHandler(query, data) {
     return function handleLinkClick(event) {
         if (isFetching) return;
         isFetching = true;
-
+        var clickedText = event.target.textContent;
+        console.log(clickedText)
+        equivalentNames = colorLinkHandler(clickedText, data);
+        if (clickedText in labTests) {
+            document.getElementById('messages').innerHTML = labTests[clickedText];
+            document.getElementById('Instructions').innerHTML = 'See lab test rationale below.<br> Click on another test to get reasons for test.'
+            document.getElementById('messages').scrollIntoView({behavior: 'smooth' });
+            isFetching=false;
+            return 
+        }
         event.preventDefault();
         document.body.style.cursor = 'wait';
         var loading = document.querySelector('.loading');
         loading.style.display = 'flex';
-        var clickedText = event.target.textContent;
+
         document.getElementById('Instructions').textContent = "Getting lab test rationale.. please wait";
-        colorLinkHandler(clickedText, data);
         fetchWithTimeout('/test-reasons', {
             method: 'POST',
             headers: {
@@ -230,14 +239,17 @@ function createLinkClickHandler(query, data) {
         .then(response => {
             if (!response.ok) {
                 document.getElementById('Instructions').innerHTML = '<span style="font-weight:bold; color:red;">There was a problem with the network.<br> Please try again.</span>';
-                modalDialouge('Something went wrong getting the test rationale. Please try again.');
+                modalDialouge('Something went wrong getting the test rationale. Please wait a few seconds then try again.');
                 throw new Error('There was a problem with the network. Please try again.');
             }
-            return response.text()})
+            return response.json()})
         
         .then(data => {
             // Handle the response data here
-            document.getElementById('messages').innerHTML = data;
+            document.getElementById('messages').innerHTML = data['response'];
+            equivalentNames.forEach(test => {
+                labTests[test] = data['response']
+            });
             document.getElementById('Instructions').innerHTML = 'See lab test rationale below.<br> Click on another test to get reasons for test.'
             document.getElementById('messages').scrollIntoView({behavior: 'smooth' });
             
@@ -245,7 +257,7 @@ function createLinkClickHandler(query, data) {
         .catch((error) => {
             console.error('Error:', error);
             document.getElementById('Instructions').innerHTML = '<span style="font-weight:bold; color:red;">There was a problem with the network.<br> Please try again.</span>';
-            modalDialouge('Something went wrong getting the test rationale. Please try again.');
+            modalDialouge('Something went wrong getting the test rationale. Please wait a few seconds and try again.');
         })
         .finally(() => {
             isFetching=false;
@@ -266,12 +278,15 @@ function colorLinkHandler(clickedText,data) {
     let links = document.getElementsByTagName("a");
             // Select all links with the equivalent name
     for (let i = 0; i < links.length; i++) {
+        links[i].style.color = 'black';
         let linkText = links[i].textContent;
         for (let j = 0; j < equivalentNames.length; j++) {
             if (linkText.indexOf(equivalentNames[j]) !== -1) {
                 links[i].style.color = "green";
                 break;}
-        }}}
+
+        }}
+    return equivalentNames}
 
 // code for loading the checklist on click of Add health data (1 or 2) or clearing checklist (both use fuction loadChecklist)
 

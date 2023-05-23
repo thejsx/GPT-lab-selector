@@ -2,6 +2,7 @@ body {
     background-color:rgb(139, 182, 184);
     color:black;
     overflow-y: auto;
+    box-sizing: border-box;
  }
 
  #API-title {
@@ -13,20 +14,21 @@ body {
 }
 
 .instructions-container {
-    background-color: white;
-    border: 1px solid black;
+    display: flex;
     align-items: center;
     justify-content: center;
-    margin: 1vh auto 1vh auto;
-    width: fit-content;
-    display: flex;
-    padding:2%;
-    height: fit-content;
+    width: 100%;
+    padding: 2%;
+    margin: 1vh 0 1vh 0;
+
 }
 
 #Instructions {
+    background-color: white;
+    border: 1px solid black;
     align-items: center;
-    justify-content: center;
+    width: fit-content;
+    padding: 2vw;
 }
 
 #input-container {
@@ -44,7 +46,7 @@ body {
     border: 1px solid blue;
     padding: 2vw;
     width: fit-content;
-    max-width: 800px;
+    max-width: 80vw;
 }
 
 
@@ -78,9 +80,11 @@ body {
 #messages {
     background-color: white;
     border: 1px solid green;
-    padding: 3vw;
+    padding: 2vw;
     width: fit-content;
+    max-width: 80%;
 }
+
 
 .results-container {
     display: grid;
@@ -91,6 +95,10 @@ body {
     width: fit-content;
     max-width: 95vw;
     margin: 3vh auto 2.5vh auto;
+}
+
+.results-container h2 {
+    font-size: 16px;
 }
 
 #result1, #result2 {
@@ -104,7 +112,7 @@ body {
     padding: 1.5vw;
     margin-top: 1vh;
     width: fit-content;
-    min-width: 25vw;
+    min-width: 90%;
 }
 
 .panel {
@@ -400,7 +408,7 @@ h1 {
   }
   
   @media (min-width: 768px) {
-    body {
+    body, .results-container h2 {
       font-size: 18px; /* Increased font size for screens 768px and wider */
     }
     .box, .drop-down, #queryInput, .checklistbuttons button, .query-box div button {
@@ -409,7 +417,7 @@ h1 {
   }
   
   @media (min-width: 1024px) {
-    body {
+    body, .results-container h2 {
       font-size: 20px; /* Even larger font size for screens 1024px and wider */
     }
     .box, .drop-down, #queryInput, .checklistbuttons button, .query-box div button {
@@ -418,8 +426,8 @@ h1 {
   }
 
   @media (min-width: 1350px) {
-    body {
-      font-size: 24px; /* Even larger font size for screens 1024px and wider */
+    body, .results-container h2 {
+      font-size: 24px; /* Even larger font size for screens 1350px and wider */
     }
     .box, .drop-down, #queryInput, .checklistbuttons button, .query-box div button {
         font-size: 18px;

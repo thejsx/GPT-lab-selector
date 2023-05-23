@@ -25,7 +25,11 @@ def read_root(request: Request):
 @app.post("/process")
 async def process_query(query: models.QueryData = Body(...)):
     query = query.dict()
-    gpt_response = gpt_funcs.gpt_lab_recommender(query['query'])
+    try:
+        gpt_response = gpt_funcs.gpt_lab_recommender(query['query'])
+    except Exception as e:
+        print(f'The query {query} generated an error {e}')
+        return {}
     try:
         final_dict,panel_dict = find_lab_test_matches_complete(gpt_response)
     except:
@@ -36,7 +40,7 @@ async def process_query(query: models.QueryData = Body(...)):
 async def test_query(query: str = Form(...), clickedText: str = Form(...)):
     reply = gpt_funcs.test_explanation(query,clickedText)
     # return Response(f'{clickedText}:<br/>{reply}', media_type='text/plain')
-    return Response(f'<span style="font-weight:bold;">{clickedText}:</span><br><span style="font-weight:normal;">{reply}</span>',media_type='text/plain')
+    return {'response':f'<span style="font-weight:bold;">{clickedText}:</span><br><span style="font-weight:normal;">{reply}</span>'}
 
 @app.post('/validate')
 async def validate_query(query: str = Form(...)):
