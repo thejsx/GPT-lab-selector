@@ -45,7 +45,7 @@ async def test_query(query: str = Form(...), clickedText: str = Form(...)):
         return {'response':f'<span style="font-weight:bold;">{clickedText}:</span><br><span style="font-weight:normal;">{reply}</span>'}
     except Exception as e:
         print(f'Query {query} and clickedText {clickedText} generated error {e} during processing')
-        return {}
+        return {'response': 'Something went wrong generating the rationale. Please try again.'}
 
 @app.post('/validate')
 async def validate_query(query: str = Form(...)):

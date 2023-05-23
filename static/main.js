@@ -219,7 +219,7 @@ function createLinkClickHandler(query, data) {
         isFetching = true;
         var clickedText = event.target.textContent;
         equivalentNames = colorLinkHandler(clickedText, data);
-        if (clickedText in labTests) {
+        if (clickedText in labTests && labTests[clickedText] !== 'Something went wrong generating the rationale. Please try again.') {
             document.getElementById('messages').innerHTML = labTests[clickedText];
             document.getElementById('Instructions').innerHTML = 'See lab test rationale below.<br> Click on another test to get reasons for test.'
             document.getElementById('messages').scrollIntoView({behavior: 'smooth' });
@@ -242,7 +242,7 @@ function createLinkClickHandler(query, data) {
         .then(response => {
             if (!response.ok) {
                 document.getElementById('Instructions').innerHTML = '<span style="font-weight:bold; color:red;">There was a problem with the network.<br> Please try again.</span>';
-                modalDialouge('Something went wrong getting the test rationale. Please wait a few seconds then try again.');
+                modalDialouge('Something went wrong getting the test rationale. Please wait about 10 seconds then try again.');
                 throw new Error('There was a problem with the network. Please try again.');
             }
             return response.json()})
@@ -260,7 +260,7 @@ function createLinkClickHandler(query, data) {
         .catch((error) => {
             console.error('Error:', error);
             document.getElementById('Instructions').innerHTML = '<span style="font-weight:bold; color:red;">There was a problem with the network.<br> Please try again.</span>';
-            modalDialouge('Something went wrong getting the test rationale. Please wait a few seconds and try again.');
+            modalDialouge('Something went wrong getting the test rationale. Please wait about 10 seconds and try again.');
         })
         .finally(() => {
             isFetching=false;
