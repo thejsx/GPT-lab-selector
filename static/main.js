@@ -3,7 +3,7 @@ var labTests = {};
 
 let isFetching = false;
 
-const fetchWithTimeout = (url, options, timeout = 6000) => {
+const fetchWithTimeout = (url, options, timeout = 10000) => {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
   
@@ -26,7 +26,7 @@ function compareDicts(dict1, dict2) {
             return false;
         }
     }
-    if  (dict1['Conditions'].length !== dict2['Conditions'].length || dict1['Conditions'].every((val,index) => val !== dict2['Conditions'][index]) || dict2['Conditions'].every((val,index) => val !== dict1['Conditions'][index])) {
+    if  ((dict1['Conditions'].length !== 0 || dict2['Conditions'].length !== 0) &&(dict1['Conditions'].length !== dict2['Conditions'].length || dict1['Conditions'].every((val,index) => val !== dict2['Conditions'][index]) || dict2['Conditions'].every((val,index) => val !== dict1['Conditions'][index]))) {
         return false;
     }
     if (dict1['Query'] !== dict2['Query']) {
@@ -150,18 +150,22 @@ function submitQuery(query) {
         return response.json();})
     .catch(error => {
         console.error('Error converting response to JSON:', error);
-        document.getElementById('Instructions').innerHTML = '<span style="font-weight:bold; color:red;">Something went wrong with returning lab tests. Please try again.<br>Click on "Add health data" then fill out and submit the form to get assistance with lab test selection.</span>';
+        document.getElementById('Instructions').innerHTML = '<span style="font-weight:bold; color:red;">Something went wrong with returning lab tests. Please try again.<br>Click on "Add health data" then fill out and submit the form to get assistance with lab test selection.</span><br>'+ 'If these issues are persistent, please click ' + '<a href="https://status.openai.com/" target="_blank" rel="noopener noreferrer">here</a>' + ' to see if the OpenAI network is experiencing difficulties.';;
         modalDialouge('Something went wrong in returning lab tests. Please try again.')
         return {};
     })
     .then(data => {
         if (Object.keys(data).length === 0) {
             // If the data is empty, update the message
-            document.getElementById('Instructions').innerHTML = '<span style="font-weight:bold; color:red;">Something went wrong with returning lab tests. Please try again.<br>Click on "Add health data" then fill out and submit the form to get assistance with lab test selection.</span>';
-            modalDialouge('Something went wrong in returning lab tests. Please try again.');
+            document.getElementById('Instructions').innerHTML = '<span style="font-weight:bold; color:red;">Something went wrong with returning lab tests.<br>Click on "Add health data" and consider changing your input or adding more health data then trying again.</span><br>'+ 'If these issues are persistent, please click ' + '<a href="https://status.openai.com/" target="_blank" rel="noopener noreferrer">here</a>' + ' to see if the OpenAI network is experiencing difficulties.';
+            modalDialouge('Something went wrong returning lab tests. Please try again.');
         } 
         else {
-        document.getElementById('Instructions').innerHTML = "Here are lab tests that may be helpful given your clinical history and concerns.<br>Please click on a lab test to see why.";
+            if (Object.keys(data['GPT tests']).length <= 5) {
+                document.getElementById('Instructions').innerHTML = '<span style="font-weight:bold; color:red;">Only ' + Object.keys(data['GPT tests']).length + ' lab results were returned.<br>Consider adding more health data to get more lab results.</span><br>';
+            }
+            else {
+                document.getElementById('Instructions').innerHTML = "Here are lab tests that may be helpful given your clinical history and concerns.<br>Please click on a lab test to see why.";}
 
         document.getElementById('messages').innerHTML = "Please click on a lab test above to get the rationale.";
 
@@ -242,7 +246,7 @@ function createLinkClickHandler(query, data) {
         .then(response => {
             if (!response.ok) {
                 document.getElementById('Instructions').innerHTML = '<span style="font-weight:bold; color:red;">There was a problem with the network.<br> Please try again.</span>';
-                modalDialouge('Something went wrong getting the test rationale. Please wait about 10 seconds then try again.');
+                modalDialouge('Something went wrong getting the test rationale. Please wait a few seconds then try again.');
                 throw new Error('There was a problem with the network. Please try again.');
             }
             return response.json()})
@@ -253,14 +257,14 @@ function createLinkClickHandler(query, data) {
             equivalentNames.forEach(test => {
                 labTests[test] = data['response']
             });
-            document.getElementById('Instructions').innerHTML = 'See lab test rationale below.<br> Click on another test to get reasons for test.'
+            document.getElementById('Instructions').innerHTML = 'See lab test rationale below.<br> Click on another test to get the rationale for that test.'
             document.getElementById('messages').scrollIntoView({behavior: 'smooth' });
             
         })
         .catch((error) => {
             console.error('Error:', error);
-            document.getElementById('Instructions').innerHTML = '<span style="font-weight:bold; color:red;">There was a problem with the network.<br> Please try again.</span>';
-            modalDialouge('Something went wrong getting the test rationale. Please wait about 10 seconds and try again.');
+            document.getElementById('Instructions').innerHTML = '<span style="font-weight:bold; color:red;">The server had difficulty retrieving the test rationale. Please try again.<br></span>' + 'If these issues are persistent, please click ' + '<a href="https://status.openai.com/" target="_blank" rel="noopener noreferrer">here</a>' + ' to see if the OpenAI network is experiencing difficulties.';
+            modalDialouge('Something went wrong retrieving the test rationale. Please wait a few seconds then try again.');
         })
         .finally(() => {
             isFetching=false;
@@ -352,7 +356,6 @@ document.addEventListener('click', function(event) {
 
         if (Object.values(healthDict['Patient']).every(value => value == '') && healthDict['Conditions'].length == 0 && healthDict['Query'].length == 0){
 
-            console.log('no data');
             modalDialouge('Cannot submit an empty questionnaire! Please add information then click "Submit"');
         }
         else if (healthDict['Query'].length >0 && document.getElementById('validateQuery').textContent !== 'VALID!') {
@@ -360,8 +363,7 @@ document.addEventListener('click', function(event) {
             }
 
         else if (healthData != null && compareDicts(healthDict,healthData) == true && document.getElementById('result1').textContent.length > 0) {
-            console.log('healtDict and healthData are equal');
-            modalDialouge('No changes have been made to the form. Please make changes before submitting or press the "X" at the top right to exit.');
+            modalDialouge('No changes have been made to the form. Please make changes before submitting or press the "X" or "Cancel" to exit.');
         }
 
         else {

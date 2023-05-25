@@ -19,9 +19,10 @@ def query_validator(query):
     return responseValid
 
 def query_str_maker(patient_dict):
-    new_query = 'Patient' + (f' {patient_dict["Patient"]["age"]} yr old' if len(patient_dict["Patient"]["age"]) > 0 else '') + (f' {patient_dict["Patient"]["gender"]}' if len(patient_dict["Patient"]["gender"]) > 0 else '') + (f' {patient_dict["Patient"]["weight"]} lbs' if len(patient_dict["Patient"]["weight"]) > 0 else '') + (f" with the following condition(s): {', '.join(patient_dict['Conditions'])}." if len(patient_dict['Conditions'])>0 else '.')
+    new_query = 'Patient is' + (f' {patient_dict["Patient"]["age"]} yr old' if len(patient_dict["Patient"]["age"]) > 0 else '') + (f' {patient_dict["Patient"]["gender"]}' if len(patient_dict["Patient"]["gender"]) > 0 else '') + (f' {patient_dict["Patient"]["weight"]} lbs' if len(patient_dict["Patient"]["weight"]) > 0 else '')
+    new_query = (f"Patient with the following condition(s): {', '.join(patient_dict['Conditions'])}. " if len(patient_dict['Conditions'])>0 else '') if new_query == 'Patient is' else (f"{new_query} with the following condition(s): {', '.join(patient_dict['Conditions'])}. " if len(patient_dict['Conditions'])>0 else f'{new_query}. ')
     if patient_dict['Query'] != '':
-      new_query = new_query + ' Concern: ' + patient_dict['Query']
+      new_query = new_query + 'Concern: ' + patient_dict['Query']
     return new_query
 
 def gpt_lab_recommender(prompt):

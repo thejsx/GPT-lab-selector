@@ -6,15 +6,17 @@ from labtests import test_dict_lower, test_list_lower, test_dict, test_list, ref
 
 def find_lab_test_matches_complete(gpt_response):
     labmatch = gpt_tests_regex(gpt_response)
-
     nomatch_dict,match_dict = initial_menu_match(labmatch)
     nomatch_dict, match_dict = reverse_menu_search(nomatch_dict,match_dict,labmatch)
 
     if len(match_dict)==0:
        return None
     if len(nomatch_dict) > 0:
-        reply_dict = gpt_matcher(nomatch_dict)
-        final_dict = match_result_search(reply_dict,nomatch_dict,match_dict,labmatch)
+        print('Some non-matches:')
+        print(nomatch_dict)
+        final_dict= match_dict
+        # reply_dict = gpt_matcher(nomatch_dict)
+        # final_dict = match_result_search(reply_dict,nomatch_dict,match_dict,labmatch)
     else:
         final_dict = match_dict
     final_dict = group_and_remove_tests(final_dict)
@@ -22,7 +24,7 @@ def find_lab_test_matches_complete(gpt_response):
     return final_dict, panel_dict
 
 def gpt_tests_regex(messageReturned):
-  regex1 = r"(?<=\d{1,2}\.\s+)(.+?)(?=\n|[-:]\s|$)"
+  regex1 = r"(?<=\d{1,2}\.\s+)(.+?)(?=\n|[:-]\s|$)"
   regex2= r"(?<=-\s+)(.+?)(?=\n|[-:]\s|$)"
   if '1. ' in messageReturned:
     labmatch = regex.findall(regex1,messageReturned)
@@ -57,13 +59,13 @@ def reverse_menu_search(nomatch_dict,match_dict,labmatch):
     # search for test (from both abbrev and full lists) in string or search for string in test lists and append results
     for index in range(len(test_list_lower)):
 
-      if bool(re.search(r"\b{}\b".format(test_dict_lower[index]), value)) == True:
+      if bool(re.search(r"\b{}\b".format(re.escape(test_dict_lower[index])), value)) == True:
         nomatch_dict[key].append(test_dict['tests'][index])
 
-      elif bool(re.search(r"\b{}\b".format(test_list_lower[index]), value)) == True:
+      elif bool(re.search(r"\b{}\b".format(re.escape(test_list_lower[index])), value)) == True:
         nomatch_dict[key].append(test_dict['tests'][index])
 
-      elif bool(re.search(r"\b{}\b".format(value), test_dict_lower[index])) == True  or bool(re.search(r"\b{}\b".format(value), test_list_lower[index])) == True:
+      elif bool(re.search(r"\b{}\b".format(re.escape(value)), test_dict_lower[index])) == True  or bool(re.search(r"\b{}\b".format(value), test_list_lower[index])) == True:
         nomatch_dict[key].append(test_dict['tests'][index])
 
   copy_nomatch_dict = copy.deepcopy(nomatch_dict)
