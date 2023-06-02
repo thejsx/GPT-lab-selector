@@ -5,6 +5,58 @@ body {
     box-sizing: border-box;
  }
 
+#agreeModal {
+    display: flex;
+  }
+
+.disclaimer {
+    background-color: #f0f0f0;
+    border: 1px solid #cccccc;
+    padding: 20px;
+    margin: 20px auto;
+    width: 70%;
+    text-align: left;
+    overflow-y: auto;
+    max-height: 100%;
+  }
+  
+  .disclaimer h2 {
+    text-align: center;
+  }
+
+  #disclaimer2, #disclaimer3 {
+    display: none;
+  }
+    
+  #buttonWrapper {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  #agreeButton, .cancelButton, #nextButton1, #nextButton2 {
+    width: 200px;
+    height: 50px;
+    background-color: #0066cc;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+  #agreeButton:hover, #cancelButton:hover {
+    background-color: #004d99;
+  }
+  
+  .cancelButton {
+    background-color: #cc0000;
+  }
+  
+  #cancelButton:hover {
+    background-color: #990000;
+  }
+
  #API-title {
     padding-top: 1vh;
     padding-bottom: 1vh;
@@ -84,7 +136,6 @@ body {
     width: fit-content;
     max-width: 80%;
 }
-
 
 .results-container {
     display: grid;
@@ -171,7 +222,7 @@ a:hover {
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: rgba(0,0,0,0.75); /* Black w/ opacity */
     overflow: auto;
   }
   
@@ -407,30 +458,35 @@ h1 {
   body {
     font-size: 16px; /* Default font size for smaller screens */
   }
+
+  .disclaimer li {
+    font-size: 14px;
+    font-weight: bold;
+  }
   
   @media (min-width: 768px) {
-    body, .results-container h2 {
+    body, .results-container h2, #disclaimer p {
       font-size: 18px; /* Increased font size for screens 768px and wider */
     }
-    .box, .drop-down, #queryInput, .checklistbuttons button, .query-box div button {
+    .box, .drop-down, #queryInput, .checklistbuttons button, .query-box div button, .disclaimer li {
         font-size: 14px;
     }
   }
   
   @media (min-width: 1024px) {
-    body, .results-container h2 {
+    body, .results-container h2, .disclaimer p {
       font-size: 20px; /* Even larger font size for screens 1024px and wider */
     }
-    .box, .drop-down, #queryInput, .checklistbuttons button, .query-box div button {
+    .box, .drop-down, #queryInput, .checklistbuttons button, .query-box div button, .disclaimer li {
         font-size: 16px;
     }
   }
 
   @media (min-width: 1350px) {
-    body, .results-container h2 {
+    body, .results-container h2, .disclaimer p {
       font-size: 24px; /* Even larger font size for screens 1350px and wider */
     }
-    .box, .drop-down, #queryInput, .checklistbuttons button, .query-box div button {
+    .box, .drop-down, #queryInput, .checklistbuttons button, .query-box div button, .disclaimer li {
         font-size: 18px;
     }
   }

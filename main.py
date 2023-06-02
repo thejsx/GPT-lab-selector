@@ -22,6 +22,8 @@ templates = Jinja2Templates(directory="templates")
 def read_root(request: Request):
     return templates.TemplateResponse("input.html", {"request": request})
 
+
+
 @app.post("/process")
 async def process_query(query: models.QueryData = Body(...)):
     query = query.dict()

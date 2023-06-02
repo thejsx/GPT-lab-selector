@@ -1,8 +1,8 @@
 var healthData = null;
 var labTests = {};
-
 let isFetching = false;
 
+  
 const fetchWithTimeout = (url, options, timeout = 10000) => {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
@@ -35,6 +35,32 @@ function compareDicts(dict1, dict2) {
     return true;
 };
 
+document.getElementById('nextButton1').addEventListener('click', function(event) {
+    document.getElementById('disclaimer1').style.display = "none";
+    document.getElementById('disclaimer2').style.display = "block";
+});
+
+document.getElementById('nextButton2').addEventListener('click', function(event) {
+    document.getElementById('disclaimer2').style.display = "none";
+    document.getElementById('disclaimer3').style.display = "block";
+});
+
+document.getElementById('agreeButton').addEventListener('click', function(event) {
+    document.getElementById('agreeModal').style.display = "none";
+});
+
+var cancelButtons = document.getElementsByClassName('cancelButton');
+
+for (var i = 0; i < cancelButtons.length; i++) {
+    cancelButtons[i].addEventListener('click', function(event) {
+        console.log('called')
+        if(document.referrer === "" || document.referrer === "http://127.0.0.1:8000/") {
+            window.location.href = "https://ppl.luminatehealth.com/";
+        } else {
+            window.history.back();
+        }
+    });
+}
 
 document.addEventListener("keyup", function(event) {
     if (event.target.id === 'queryInput'){

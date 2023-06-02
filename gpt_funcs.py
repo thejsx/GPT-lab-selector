@@ -2,9 +2,9 @@ import openai
 from labtests import test_list_str
     
 def test_explanation(query, clickedText):
-    messages = [{"role": "system", "content": f'In 50 tokens or less explain why this lab test might be helpful in the below history/complaint. Do not include test name in response: {clickedText}'}]
+    messages = [{"role": "system", "content": f'In 75 tokens or less explain why this lab test might be helpful in the below history/complaint. Do not include test name in response: {clickedText}'}]
     messages.append({"role": "user", "content":f'History/complain: {query}'})
-    response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages, temperature = 1, max_tokens = 50)
+    response = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages, temperature = 1, max_tokens = 75)
     return response["choices"][0]["message"]["content"]
 
 def query_validator(query):
