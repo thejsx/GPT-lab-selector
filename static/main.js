@@ -26,7 +26,9 @@ function compareDicts(dict1, dict2) {
             return false;
         }
     }
-    if  ((dict1['Conditions'].length !== 0 || dict2['Conditions'].length !== 0) &&(dict1['Conditions'].length !== dict2['Conditions'].length || dict1['Conditions'].every((val,index) => val !== dict2['Conditions'][index]) || dict2['Conditions'].every((val,index) => val !== dict1['Conditions'][index]))) {
+    // if  ((dict1['Conditions'].length !== 0 || dict2['Conditions'].length !== 0) &&(dict1['Conditions'].length !== dict2['Conditions'].length || dict1['Conditions'].every((val,index) => val !== dict2['Conditions'][index]) || dict2['Conditions'].every((val,index) => val !== dict1['Conditions'][index]))) {
+
+    if (dict1['Conditions'].every(val => dict2['Conditions'].includes(val)) !== true || dict2['Conditions'].every(val => dict1['Conditions'].includes(val)) !== true) {
         return false;
     }
     if (dict1['Query'] !== dict2['Query']) {
@@ -45,22 +47,38 @@ document.getElementById('nextButton2').addEventListener('click', function(event)
     document.getElementById('disclaimer3').style.display = "block";
 });
 
+document.getElementById('nextButton3').addEventListener('click', function(event) {
+    document.getElementById('disclaimer3').style.display = "none";
+    document.getElementById('disclaimer4').style.display = "block";
+});
+
 document.getElementById('agreeButton').addEventListener('click', function(event) {
     document.getElementById('agreeModal').style.display = "none";
 });
 
-var cancelButtons = document.getElementsByClassName('cancelButton');
+document.getElementById('cancelButton').addEventListener('click', function(event) {
+    if(document.referrer === "" || document.referrer === "http://127.0.0.1:8000/") {
+        window.location.href = "https://ppl.luminatehealth.com/";
+    } else {
+        window.history.back();
+    }
+});
 
-for (var i = 0; i < cancelButtons.length; i++) {
-    cancelButtons[i].addEventListener('click', function(event) {
-        console.log('called')
-        if(document.referrer === "" || document.referrer === "http://127.0.0.1:8000/") {
-            window.location.href = "https://ppl.luminatehealth.com/";
-        } else {
-            window.history.back();
-        }
-    });
-}
+document.getElementById('back1').addEventListener('click', function(event) {
+    document.getElementById('disclaimer2').style.display = "none";
+    document.getElementById('disclaimer1').style.display = "block";
+});
+
+document.getElementById('back2').addEventListener('click', function(event) {
+    document.getElementById('disclaimer3').style.display = "none";
+    document.getElementById('disclaimer2').style.display = "block";
+});
+
+document.getElementById('back3').addEventListener('click', function(event) {
+    document.getElementById('disclaimer4').style.display = "none";
+    document.getElementById('disclaimer3').style.display = "block";
+});
+
 
 document.addEventListener("keyup", function(event) {
     if (event.target.id === 'queryInput'){
@@ -156,9 +174,12 @@ function submitQuery(query) {
     document.body.style.cursor = 'wait';
     var loading = document.querySelector('.loading');
     loading.style.display = 'flex';
-    document.getElementById('notes-container').style.display = 'flex';
+
+    // document.getElementById('notes-container').style.display = 'flex';
+    // document.getElementById('notes').textContent = "Please note that the lab tests that are returned here may be inconsistent or inaccurate. Additionally, other laboratory or non-laboratory tests that are not offered here may be more appropriate. It is recommended that you consult with a qualified healthcare provider to determine what lab tests are most appropriate for your specific medical needs.";
+
     document.getElementById('Instructions').textContent = "Getting lab tests.. this could take a minute.";
-    document.getElementById('notes').textContent = "Please note that the lab tests that are returned here may be inconsistent or inaccurate. Additionally, other laboratory or non-laboratory tests that are not offered here may be more appropriate. It is recommended that you consult with a qualified healthcare provider to determine what lab tests are most appropriate for your specific medical needs.";
+    document.getElementById('rationaleCont').style.display = 'flex';
 
     let data = {query: query }
     fetch('/process', {
@@ -194,6 +215,10 @@ function submitQuery(query) {
                 document.getElementById('Instructions').innerHTML = "Here are lab tests that may be helpful given your clinical history and concerns.<br>Please click on a lab test to see why.";}
 
         document.getElementById('messages').innerHTML = "Please click on a lab test above to get the rationale.";
+        document.getElementById('results-container').style.display = 'grid';
+        document.getElementById('q3').style.display = 'flex';
+
+        window.scrollTo(0,0);
 
         var result1Div = document.getElementById('result1');
         var result2Div = document.getElementById('result2');
@@ -201,30 +226,94 @@ function submitQuery(query) {
         var panelsDict = data["Panels"];
 
         for (var key in gptTestsDict) {
-            var a = document.createElement('a');
-            a.innerHTML = gptTestsDict[key]
-            a.style.cursor = 'pointer;'
-            a.addEventListener('click',createLinkClickHandler(query, data['Dicts']));
-            result1Div.appendChild(a);
-        }
+            // Create a new div for each row
+            var rowDiv = document.createElement('div');
+            rowDiv.style.display = 'contents';
+        
+            // Test link
+            var aTest = document.createElement('a');
+            aTest.innerHTML = gptTestsDict[key];
+            aTest.style.cursor = 'pointer';
+            aTest.addEventListener('click', createLinkClickHandler(query, data['Dicts']));
+            rowDiv.appendChild(aTest);
+        
+            // Add to Cart link
+            var aCart = document.createElement('button');
+            aCart.innerHTML = 'Add to Cart';
+            aCart.className = 'cart-button';
+            aCart.href = '#'; // Placeholder URL
+            aCart.style.cursor = 'pointer';
+            rowDiv.appendChild(aCart);
+        
+            // More Info link
+            var aInfo = document.createElement('button');
+            aInfo.innerHTML = 'More Info';
+            aInfo.className = 'info-button';
+            aInfo.href = '#'; // Placeholder URL
+            aInfo.style.cursor = 'pointer';
+            rowDiv.appendChild(aInfo);
+        
+            // Append the row to the result div
+            result1Div.appendChild(rowDiv);
+        }     
        
         for (var key in panelsDict) {
-            var panel = document.createElement('div');
-            panel.className = 'panel';
-            var panelTitle = document.createElement('div');
-            panelTitle.innerHTML = '<span class="bold-key">' + key + ':' + '</span>';
-            panel.appendChild(panelTitle);
-            var tests = document.createElement('div');
-            tests.className = 'indented-item';
+            var rowDiv = document.createElement('div');
+            rowDiv.style.display = 'contents';
+
+            var aPanel = document.createElement('a');
+            aPanel.innerHTML = key;
+            aPanel.style.cursor = 'pointer';
+            aPanel.addEventListener('click', panelClick);
+            rowDiv.appendChild(aPanel);
+
+            var aCart = document.createElement('button');
+            aCart.innerHTML = 'Add to Cart';
+            aCart.className = 'cart-button'
+            aCart.href = '#'; // Placeholder URL
+            aCart.style.cursor = 'pointer';
+            rowDiv.appendChild(aCart);
+        
+            var aInfo = document.createElement('button');
+            aInfo.innerHTML = 'More Info';
+            aInfo.className = 'info-button';
+            aInfo.href = '#'; // Placeholder URL
+            aInfo.style.cursor = 'pointer';
+            rowDiv.appendChild(aInfo);
+
+            result2Div.appendChild(rowDiv);
+
+            // create a seperate html element for the panel tests
+            var panelBox = document.getElementById('panel-box');
+            var panelTests = document.createElement('div');
+            panelTests.className = 'panel';
+            panelTests.id = key;
+            var boldkey = document.createElement('div');
+            boldkey.className = 'bold-key';
+            boldkey.innerHTML = 'The following tests are included in the ' + key.slice(0,key.indexOf('(')-1) + ':' + '<br><br>';
+            panelTests.appendChild(boldkey);
+            var testGrid = document.createElement('div');
+            testGrid.className = 'test-grid';
             panelsDict[key].forEach((item) => {
-                var test = document.createElement('a');
-                test.style.cursor = 'pointer;'
-                test.addEventListener('click',createLinkClickHandler(query, data['Dicts']));
-                test.innerHTML = item;
-                tests.appendChild(test);
+                if (typeof item === 'string') {
+                    var test = document.createElement('a');
+                    test.style.cursor = 'pointer;'
+                    test.addEventListener('click',createLinkClickHandler(query, data['Dicts']));
+                    test.innerHTML = item;
+                    testGrid.appendChild(test);
+                }
+                else {
+                    for (let i=0; i<item.length; i++) {
+                        var div = document.createElement('div');
+                        var textNode = document.createTextNode(item[i]);
+                        div.appendChild(textNode);
+                        testGrid.appendChild(div);
+                    }
+                }
             })
-            panel.appendChild(tests);
-            result2Div.appendChild(panel);
+            panelTests.appendChild(testGrid);
+            panelBox.appendChild(panelTests);
+
         }
 }})
     .catch((error) => {
@@ -299,7 +388,20 @@ function createLinkClickHandler(query, data) {
         });
     }};
 
-// code to color all equivalent links green after clicking
+function panelClick(event) {
+        var clickedText = event.target.textContent;
+        event.stopPropagation();
+        var panel = document.getElementById(clickedText);
+        panel.style.display = 'flex';
+        var modal = document.getElementById('panelModal');
+        modal.style.display = 'flex';
+        window.onclick = function(event) {
+            modal.style.display = "none";
+            panel.style.display = "none";
+        }
+    }
+
+// code to color all equivalent links green after clicking (no longer needed) now just returns equivalent names
 function colorLinkHandler(clickedText,data) {
     equivalentNames = [clickedText];
     if (data[0].indexOf(clickedText) != -1 && data[1].indexOf(clickedText) !== -1) {}
@@ -308,10 +410,10 @@ function colorLinkHandler(clickedText,data) {
     else {
         equivalentNames.push(data[0][data[1].indexOf(clickedText)])    }
 
+                // Select all links with the equivalent name (not used anymore)
     let links = document.getElementsByTagName("a");
-            // Select all links with the equivalent name
     for (let i = 0; i < links.length; i++) {
-        links[i].style.color = 'black';
+        links[i].style.color = '';
         let linkText = links[i].textContent;
         for (let j = 0; j < equivalentNames.length; j++) {
             if (linkText.indexOf(equivalentNames[j]) !== -1) {

@@ -7,7 +7,7 @@ import os
 from fastapi.staticfiles import StaticFiles
 import gpt_funcs
 import labtests
-from test_search import find_lab_test_matches_complete
+from test_search import find_lab_test_matches_complete, remove_panels
 from starlette.responses import Response
 import models
 
@@ -22,8 +22,6 @@ templates = Jinja2Templates(directory="templates")
 def read_root(request: Request):
     return templates.TemplateResponse("input.html", {"request": request})
 
-
-
 @app.post("/process")
 async def process_query(query: models.QueryData = Body(...)):
     query = query.dict()
@@ -34,6 +32,7 @@ async def process_query(query: models.QueryData = Body(...)):
         return {}
     try:
         final_dict,panel_dict = find_lab_test_matches_complete(gpt_response)
+        panel_dict = remove_panels(query['query'], panel_dict)
     except Exception as e:
         print(f'The gpt_response {gpt_response} generated an error {e}')
         return {}

@@ -8,53 +8,57 @@
 
 <body>
     <div id="agreeModal" class="modal">
-        <div id="disclaimer1" class="disclaimer" >
+        <div id="disclaimer1" class="disclaimer">
             <h2>Disclaimer</h2>
-            <p>Our Lab Test Selector is designed to generate potentially helpful lab tests from the Walk in Wellness Lab menu based on the medical history and concerns you provide. Please consider the following:</p>
-                <ol><li value="1">The Lab Test Selector tool is intended as an aid and its suggestions may not be consistently accurate. Always consult with a qualified healthcare provider for the most accurate and appropriate lab tests for your specific health situation.</li></ol>
+            <p> Our Lab Test Selection Helper is designed to generate potentially helpful lab tests from the Walk in Wellness Lab menu based on the medical history and concerns you provide. Please agree to the following:</p>
             <div id="buttonWrapper">
-                <button id="nextButton1">I Agree</button>
-                <button class="cancelButton">Cancel</button>
+                <button class="cancelButton" id="cancelButton">Cancel</button>
+                <button class="agreeButton" id="nextButton1">Next</button>
             </div>
         </div>
 
         <div id="disclaimer2" class="disclaimer" >
             <h2>Disclaimer</h2>
-            <p>Our Lab Test Selector is designed to generate potentially helpful lab tests from the Walk in Wellness Lab menu based on the medical history and concerns you provide. Please consider the following:</p>
-                <ol><li value="2">You acknowledge and assume any risks associated with the use of this application.</li></ol>
+            <p>(1 of 3)  The Lab Test Selector tool is intended as an aid and its suggestions may not be consistently accurate. Always consult with a qualified healthcare provider for the most accurate and appropriate lab tests for your specific health situation.</p>
             <div id="buttonWrapper">
-                <button id="nextButton2">I Agree</button>
-                <button class="cancelButton">Cancel</button>
+                <button class="cancelButton" id="back1">Back</button>
+                <button class="agreeButton" id="nextButton2">I Agree</button>
             </div>
         </div>
 
         <div id="disclaimer3" class="disclaimer" >
             <h2>Disclaimer</h2>
-            <p>Our Lab Test Selector is designed to generate potentially helpful lab tests from the Walk in Wellness Lab menu based on the medical history and concerns you provide. Please consider the following:</p>
-                <ol><li value="3">The results of the lab tests will not be interpreted by this tool. The interpretation of lab results should be done by a qualified healthcare provider, taking into account your unique medical situation.</li></ol>
+                <p>(2 of 3)  Other tests that are not offerred by our lab may be more appropriate for your unique medical concerns.</p>
             <div id="buttonWrapper">
-                <button id="agreeButton">I Agree</button>
-                <button class="cancelButton">Cancel</button>
+                <button class="cancelButton" id="back2">Back</button>
+                <button class="agreeButton" id="nextButton3">I Agree</button>
             </div>
         </div>
-  </div>
 
+        <div id="disclaimer4" class="disclaimer" >
+            <h2>Disclaimer</h2>
+                <p>(3 of 3)  The results of the lab tests should only be interpretted by a qualified healthcare provider, taking into account your unique medical situation.</p>
+            <div id="buttonWrapper">
+                <button class="cancelButton" id="back3">Back</button>
+                <button class="agreeButton" id="agreeButton">I Agree</button>
+            </div>
+        </div>
+    </div>
 
-    <h1 id="API-title">Walk in Wellness Lab Test Selector</h1>
+    <div id="title-box">
+        <a class="logo-container" href="https://ppl.luminatehealth.com/patient/dashboard/">
+            <img src="https://ppl.luminatehealth.com/assets/images/ppl_whitelabel_logo.png" alt="Logo">
+        </a>
+        <h1 id="API-title">Lab Test Selection Helper</h1>
+    </div>
 
     <div class="instructions-container">
-        <div id="Instructions">Please click on "Add health data" then fill out and submit the form to get assistance with lab test selection.</div>
+        <div id="Instructions">To begin, click on "Add health data" then fill out and submit the health questionnaire.</div>
     </div>  
 
     <div id="button-container">
         <input type="button" class="myButton" id="refresh" value="Start Over">
         <input type="button" class="myButton" id="addInfo" value="Add health data">
-    </div>
-
-    <div id="input-container">
-        <form id="form">
-            <div id="query" name="query" rows="2"></div>
-        </form>
     </div>
 
     <div id="myModal" class="modal">
@@ -63,16 +67,26 @@
         </div>
     </div>
 
-    <div class="results-container">
-        <h2>Helpful lab tests:</h2>
-        <h2>Panels including these tests:</h2>
-        <div id="result1"></div>
-        <div id="result2"></div>
+    <div id="results-container">
+        <div id="result1Box">
+            <h2>Lab tests from our menu that may be helpful:<br>(click on test for rationale)</h2>
+            <div id="result1"></div>
+        </div>
+        <div id="result2Box">
+            <h2>Specialty panels which include tests:<br>(click on panel to see tests)</h2>
+            <div id="result2"></div>
+        </div>
     </div>
 
-    <h2>Lab Test Rationale: </h2>
-    <div class="message-container">
-        <div id="messages">Add health data first to get helpful lab tests...</div>
+    <div id="panelModal" class="modal">
+        <div id="panel-box"></div>
+    </div>
+
+    <div id="rationaleCont">
+        <h3>Lab Test rationale: </h3>
+        <div class="message-container">
+            <div id="messages">Getting lab tests, please wait...</div>
+        </div>
     </div>
 
     <div id="second-button-container">
@@ -80,9 +94,17 @@
         <input type="button" class="myButton" id="addInfo2" value="Add health data">
     </div>
 
-    <div id="notes-container">
-        <div id="notes"></div>
+    <div id="input-container">
+        <h3 id="q1">Medical query:</h3>
+        <form id="form">
+            <div id="query" name="query" rows="2"></div>
+            <div id="q3">To change the query click on "Add health data" or "Start Over".</div>
+        </form>
     </div>
+
+    <!-- <div id="notes-container">
+        <div id="notes"></div>
+    </div> -->
 
     <div id="validModal" class="validModal">
         <p id="modal-valid-text"></p>

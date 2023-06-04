@@ -7,7 +7,7 @@
     <title>Medical Questionnaire</title>
   </head>
 <body>  
-    <div class="modal-draggable" id="modal-draggable">Click to drag checklist</div> 
+    <div class="modal-draggable" id="modal-draggable"></div> 
 
     <div class="header">
         <div id="checklistTitle">
@@ -394,16 +394,16 @@
     <div class="query-box" id="customQueryBox">
         <h3>Concern:</h3>
         <textarea type="text" id="queryInput" rows=2 placeholder='Enter your concern here then click "Validate"' maxlength="280"></textarea>
-        <div>
-            <button id="validateQuery"  disabled>Validate</button>
-            <button id="clearQuery" >Remove</button>
+        <div id="query-buttons">
+            <button id="validateQuery" class="checklist-button" disabled>Validate</button>
+            <button id="clearQuery" class="checklist-button">Remove</button>
         </div>
     </div>
 
     <div class="checklistbuttons">
-        <button id="cancel" >Cancel</button>
-        <button id="clearForm" >Reset Form</button>
-        <button id="submitChecklist" >Submit</button>
+        <button id="cancel" class="checklist-button">Cancel</button>
+        <button id="clearForm" class="checklist-button">Reset Form</button>
+        <button id="submitChecklist" class="checklist-button">Submit</button>
     </div>
     
 </body>

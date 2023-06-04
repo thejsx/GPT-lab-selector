@@ -151,8 +151,14 @@ def build_panel_dict(final_dict):
     sort_vals, sort_keys = zip(*sorted(zip(list(panel_dict.values()),list(panel_dict.keys())), key = lambda x: len(x[0]), reverse = True))
     panel_dict = {}
     for x in range(len(sort_keys)):
-        if len(sort_vals[x]) > 1:
-            panel_dict[f'{sort_keys[x]} ({len(sort_vals[x])} {"test" if len(sort_vals[x])==1 else "tests"})'] = sort_vals[x]
+        panel_dict[f'{sort_keys[x]} ({len(sort_vals[x])} {"test" if len(sort_vals[x])==1 else "tests"})'] = sort_vals[x] + [[test_list[y] for y in reference_mask['panels'][sort_keys[x]] if test_list[y] not in sort_vals[x] ]]
     return panel_dict
 
-
+def remove_panels(query,panel_dict):
+  keys = list(panel_dict.keys())
+  for key in keys:
+    if 'male' in query and "Women's" in key:
+      del panel_dict[key]
+    elif 'female' in query and "Men's" in key:
+      del panel_dict[key]
+  return panel_dict
