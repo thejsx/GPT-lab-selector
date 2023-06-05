@@ -57,6 +57,7 @@ document.getElementById('agreeButton').addEventListener('click', function(event)
 });
 
 document.getElementById('cancelButton').addEventListener('click', function(event) {
+    console.log(document.referrer);
     if(document.referrer === "" || document.referrer === "http://127.0.0.1:8000/" || document.referrer === "https://gpt-lab-selector.herokuapp.com") {
         window.location.href = "https://ppl.luminatehealth.com/";
     } else {
