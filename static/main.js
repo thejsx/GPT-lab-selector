@@ -58,7 +58,7 @@ document.getElementById('agreeButton').addEventListener('click', function(event)
 
 document.getElementById('cancelButton').addEventListener('click', function(event) {
     if(document.referrer === "" || document.referrer === "http://127.0.0.1:8000/") {
-        window.location.href = "https://ppl.luminatehealth.com/";
+        window.location.href = "https://ppl-dev.luminatehealth.com/dat/browse";
     } else {
         window.history.back();
     }
@@ -97,7 +97,7 @@ document.addEventListener("keyup", function(event) {
         }
     }})
 
-// code for clicking items that don't exist in initial page (verify clear query, submit, clear form, close)
+// code for clicking items that don't exist in initial page (verify, clear query, submit, clear form, close)
 document.addEventListener('click', function(event) {
     if (event.target.id === 'validateQuery'){
     event.preventDefault();
@@ -120,7 +120,6 @@ document.addEventListener('click', function(event) {
     .catch(error => {
         console.error('Error converting response to JSON:', error);
         return {};
-
     })
     .then(data => {
         var valid = data['valid']
@@ -226,6 +225,7 @@ function submitQuery(query) {
         var panelsDict = data["Panels"];
 
         for (var key in gptTestsDict) {
+
             // Create a new div for each row
             var rowDiv = document.createElement('div');
             rowDiv.style.display = 'contents';
@@ -238,20 +238,23 @@ function submitQuery(query) {
             rowDiv.appendChild(aTest);
         
             // Add to Cart link
-            var aCart = document.createElement('button');
-            aCart.innerHTML = 'Add to Cart';
-            aCart.className = 'cart-button';
-            aCart.href = '#'; // Placeholder URL
-            aCart.style.cursor = 'pointer';
-            rowDiv.appendChild(aCart);
+            // var aCart = document.createElement('button');
+            // aCart.innerHTML = 'Add to Cart';
+            // aCart.className = 'cart-button';
+            // aCart.href = '#'; // Placeholder URL
+            // aCart.style.cursor = 'pointer';
+            // rowDiv.appendChild(aCart);
         
             // More Info link
-            var aInfo = document.createElement('button');
+            var aInfoDiv = document.createElement('div');
+            aInfoDiv.style.textAlign = 'center';
+            var aInfo = document.createElement('a');
             aInfo.innerHTML = 'More Info';
             aInfo.className = 'info-button';
-            aInfo.href = '#'; // Placeholder URL
+            aInfo.href = 'https://ppl-dev.luminatehealth.com/dat/test/details?testId=' + data['Link nums'][0][data['Dicts'][0].indexOf(gptTestsDict[key])]; // Placeholder URL
             aInfo.style.cursor = 'pointer';
-            rowDiv.appendChild(aInfo);
+            aInfoDiv.appendChild(aInfo);
+            rowDiv.appendChild(aInfoDiv);
         
             // Append the row to the result div
             result1Div.appendChild(rowDiv);
@@ -267,19 +270,22 @@ function submitQuery(query) {
             aPanel.addEventListener('click', panelClick);
             rowDiv.appendChild(aPanel);
 
-            var aCart = document.createElement('button');
-            aCart.innerHTML = 'Add to Cart';
-            aCart.className = 'cart-button'
-            aCart.href = '#'; // Placeholder URL
-            aCart.style.cursor = 'pointer';
-            rowDiv.appendChild(aCart);
+            // var aCart = document.createElement('button');
+            // aCart.innerHTML = 'Add to Cart';
+            // aCart.className = 'cart-button'
+            // aCart.href = '#'; // Placeholder URL
+            // aCart.style.cursor = 'pointer';
+            // rowDiv.appendChild(aCart);
         
-            var aInfo = document.createElement('button');
+            var aInfoDiv = document.createElement('div');
+            aInfoDiv.style.textAlign = 'center';
+            var aInfo = document.createElement('a');
             aInfo.innerHTML = 'More Info';
             aInfo.className = 'info-button';
-            aInfo.href = '#'; // Placeholder URL
+            aInfo.href = 'https://ppl-dev.luminatehealth.com/dat/test/details?testId=' + data['Link nums'][1][key.slice(0,key.indexOf(' ('))];; //  URL
             aInfo.style.cursor = 'pointer';
-            rowDiv.appendChild(aInfo);
+            aInfoDiv.appendChild(aInfo);
+            rowDiv.appendChild(aInfoDiv);
 
             result2Div.appendChild(rowDiv);
 

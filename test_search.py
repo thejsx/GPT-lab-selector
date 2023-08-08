@@ -36,6 +36,7 @@ def gpt_tests_regex(messageReturned):
     for index in range(len(test_list_lower)):
       if test_list[index] in messageReturned_lower or test_dict_lower[index] in messageReturned_lower:
         labmatch.append(test_dict_lower[index])
+  print(labmatch)
   return labmatch
 
 def initial_menu_match(labmatch):

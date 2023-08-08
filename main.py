@@ -36,7 +36,7 @@ async def process_query(query: models.QueryData = Body(...)):
     except Exception as e:
         print(f'The gpt_response {gpt_response} generated an error {e}')
         return {}
-    return {'GPT tests':final_dict, 'Panels':panel_dict, 'Dicts':[labtests.test_dict['tests'],labtests.test_list]}
+    return {'GPT tests':final_dict, 'Panels':panel_dict, 'Dicts':[labtests.test_dict['tests'],labtests.test_list], 'Link nums':[labtests.test_link_list, labtests.panel_link_dict]}
 
 @app.post("/test-reasons")
 async def test_query(query: str = Form(...), clickedText: str = Form(...)):

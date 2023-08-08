@@ -236,7 +236,7 @@ body {
     overflow-wrap: break-word;
     background-color: white;
     display: grid;
-    grid-template-columns: 2fr 1fr 0.85fr;
+    grid-template-columns: 2fr 1fr;
     gap: 1vh;
     border: 3px solid rgb(51, 156, 197);
     border-radius: 5px;
@@ -299,19 +299,18 @@ a:hover {
 }
 
 .cart-button, .info-button {
+  font-size: 12px;
   border-radius: 4px;
   border: 3px;
   color: white;
   padding: 5px;
-  font-weight: bold;
   width: fit-content;
   height: fit-content;
   background-color: #0887b1;
   box-shadow: 0 5px 5px -5px rgba(0, 0, 0, 0.5);
-}
-
-.info-button {
-  background-color: #115870;
+  display: 'inline-block';
+  border: 'none';
+  text-decoration: none;
 }
 
 /* #notes-container {
@@ -600,7 +599,7 @@ h1 {
     body, #results-container h2, .disclaimer {
       font-size: 18px; /* Increased font size for screens 768px and wider */
     }
-    .box, .drop-down, #queryInput, .checklistbuttons button, .query-box div button {
+    .box, .drop-down, #queryInput, .checklistbuttons button, .query-box div button, .info-button  {
         font-size: 14px;
     }
   }
@@ -609,7 +608,7 @@ h1 {
     body, #results-container h2, .disclaimer {
       font-size: 20px; /* Even larger font size for screens 1024px and wider */
     }
-    .box, .drop-down, #queryInput, .checklistbuttons button, .query-box div button {
+    .box, .drop-down, #queryInput, .checklistbuttons button, .query-box div button, .info-button  {
         font-size: 16px;
     }
   }
@@ -620,7 +619,7 @@ h1 {
       grid-template-rows: auto;
     }
     #result1, #result2 {
-      grid-template-columns: 3.5fr 1fr 0.9fr;
+      grid-template-columns: 2fr 1fr;
     }
   }
 
@@ -628,7 +627,7 @@ h1 {
     body, #results-container h2, .disclaimer {
       font-size: 24px; /* Even larger font size for screens 1350px and wider */
     }
-    .box, .drop-down, #queryInput, .checklistbuttons button, .query-box div button {
+    .box, .drop-down, #queryInput, .checklistbuttons button, .query-box div button, .info-button  {
         font-size: 18px;
     }
   }
