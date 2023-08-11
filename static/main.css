@@ -67,7 +67,7 @@ body {
   }
 
 #title-box {
-  width: 100%;
+  max-width: 100%;
   background-color: #008CBA;
   display: flex;
   flex-direction: column;
@@ -79,7 +79,7 @@ body {
 
 .logo-container {
   background-color: #008CBA;  /* Change to your desired background color */
-  width: fit-content;  /* Change to your desired width */
+  max-width: 100%;  /* Change to your desired width */
   height: fit-content;  /* Change to your desired height */
   margin-left: 10px;
 }
@@ -582,7 +582,7 @@ h1 {
   
   /* dealing with larger screens */
   body {
-    font-size: 16px; /* Default font size for smaller screens */
+    font-size: 1rem; /* Default font size for smaller screens */
   }
 
   .disclaimer {
@@ -597,7 +597,7 @@ h1 {
 
   @media (min-width: 768px) {
     body, #results-container h2, .disclaimer {
-      font-size: 18px; /* Increased font size for screens 768px and wider */
+      font-size: 1.125rem; /* Increased font size for screens 768px and wider */
     }
     .box, .drop-down, #queryInput, .checklistbuttons button, .query-box div button, .info-button  {
         font-size: 14px;
