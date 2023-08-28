@@ -59,9 +59,9 @@ document.getElementById('agreeButton').addEventListener('click', function(event)
 document.getElementById('cancelButton').addEventListener('click', function(event) {
     console.log(document.referrer);
     if(document.referrer === "" || document.referrer === "http://127.0.0.1:8000/" || document.referrer === "https://gpt-lab-selector.herokuapp.com") {
-        window.location.href = "https://ppl-dev.luminatehealth.com/dat/browse";
+        window.location.href = "https://ppl.luminatehealth.com/dat/browse";
     } else {
-        window.location.href = "https://ppl-dev.luminatehealth.com/dat/browse"
+        window.location.href = "https://ppl.luminatehealth.com/dat/browse"
 //         window.history.back();
     }
 });
@@ -209,11 +209,11 @@ function submitQuery(query) {
             modalDialouge('Something went wrong returning lab tests. Please try again.');
         } 
         else {
-            if (Object.keys(data['GPT tests']).length <= 5) {
+            if (Object.keys(data['GPT tests']).length <= 4) {
                 document.getElementById('Instructions').innerHTML = '<span style="font-weight:bold; color:red;">Only ' + Object.keys(data['GPT tests']).length + ' lab results were returned.<br>Consider adding more health data to get more lab results.</span><br>';
             }
             else {
-                document.getElementById('Instructions').innerHTML = "Here are lab tests that may be helpful given your clinical history and concerns.<br>Please click on a lab test to see why.";}
+                document.getElementById('Instructions').innerHTML = '<span style="font-weight:bold;">Please note that tests that are not on our menu (e.g. non-laboratory tests like imaging, functional tests, etc) may be appropriate but will not appear below.</span>';}
 
         document.getElementById('messages').innerHTML = "Please click on a lab test above to get the rationale.";
         document.getElementById('results-container').style.display = 'grid';
@@ -253,7 +253,7 @@ function submitQuery(query) {
             var aInfo = document.createElement('a');
             aInfo.innerHTML = 'More Info';
             aInfo.className = 'info-button';
-            aInfo.href = 'https://ppl-dev.luminatehealth.com/dat/test/details?testId=' + data['Link nums'][0][data['Dicts'][0].indexOf(gptTestsDict[key])]; // Placeholder URL
+            aInfo.href = 'https://ppl.luminatehealth.com/dat/test/details?testId=' + data['Link nums'][0][data['Dicts'][0].indexOf(gptTestsDict[key])]; // Placeholder URL
             aInfo.style.cursor = 'pointer';
             aInfoDiv.appendChild(aInfo);
             rowDiv.appendChild(aInfoDiv);
@@ -284,7 +284,7 @@ function submitQuery(query) {
             var aInfo = document.createElement('a');
             aInfo.innerHTML = 'More Info';
             aInfo.className = 'info-button';
-            aInfo.href = 'https://ppl-dev.luminatehealth.com/dat/test/details?testId=' + data['Link nums'][1][key.slice(0,key.indexOf(' ('))];; //  URL
+            aInfo.href = 'https://ppl.luminatehealth.com/dat/test/details?testId=' + data['Link nums'][1][key.slice(0,key.indexOf(' ('))];; //  URL
             aInfo.style.cursor = 'pointer';
             aInfoDiv.appendChild(aInfo);
             rowDiv.appendChild(aInfoDiv);
